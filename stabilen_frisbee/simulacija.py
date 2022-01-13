@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
 
+# D je koordinatni sistem diska ob t=0, N je koordinatni sistem x, y
+
 def frisbee_D(y, t, C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g):
     d1, d2, v1, v2 = y
     v = (v1**2 + v2**2)**0.5
@@ -15,7 +17,7 @@ def frisbee_D(y, t, C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g):
     dydt = [v1, v2, a1, a2]
     return dydt
 
-def frisbee_N(sol, R0_0R):
+def frisbee_D_to_N(sol, R0_0R):
     return np.matmul(R0_0R, sol.T).T
 
 def initial_N_to_D(d1, d2, v1, v2, R0_0R):
@@ -35,7 +37,7 @@ def plot_1_all(t, K, g, theta, C_dict, inital, inital_in_N=True):
         y0 = (x, y, vx, vy)
 
     sol = odeint(frisbee_D, y0, t, args=(C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g))
-    N_sistem = frisbee_N(sol, R0_0R)
+    N_sistem = frisbee_D_to_N(sol, R0_0R)
 
     fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 8))
     ax1.plot(t, sol[:, 0], label='$d_1$')
@@ -90,7 +92,7 @@ def plot_N_trajectories(t, K, g, theta_list, C_list, inital, inital_in_N=True):
             y0 = (x, y, vx, vy)
 
         sol = odeint(frisbee_D, y0, t, args=(C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g))
-        N_sistem = frisbee_N(sol, R0_0R)
+        N_sistem = frisbee_D_to_N(sol, R0_0R)
 
         ax.plot(N_sistem[:, 0], N_sistem[:, 1], label='C{}'. format(i + 1))
         ax.legend(loc='best')
