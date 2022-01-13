@@ -1,4 +1,7 @@
-Kako določiti C_l in C_d?
+Preveri čas iznihanja frisbeeja, če se ga upogne?
+
 Simulacija kot https://www.youtube.com/watch?v=BTiLOtF-LGY?
 Težišče lifta, navor?
 Pithcing, rolling, magnus effect?
+
+Koeficiente (C-je) iz terminal hitrosti?

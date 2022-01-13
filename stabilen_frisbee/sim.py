@@ -3,24 +3,6 @@ import numpy as np
 from numpy.core.function_base import linspace
 from scipy.integrate import odeint
 
-g = 1     # za napalen g se odbije, popravi parametre, video na linku, interpolacija
-m = 0.175
-A = 0.057
-ro = 1.23
-C_L0 = 0.15
-C_Lalpha = 1.4
-C_D0 = 0.08
-C_Dalpha = 2.72
-K = A * ro / (2 * m)
-theta = np.pi / 12
-R = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
-R0R0 = np.block([[R, np.zeros((2,2))], [np.zeros((2,2)), R]])   # diagonalna bločna
-
-# C_L0 = 0.0
-# C_Lalpha = 0.0
-# C_D0 = 0.0
-# C_Dalpha = 0.0
-
 def frisbee_D(y, t, C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g):
     d1, d2, v1, v2 = y
     v = (v1**2 + v2**2)**0.5
@@ -34,38 +16,114 @@ def frisbee_D(y, t, C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g):
     dydt = [v1, v2, a1, a2]
     return dydt
 
-def frisbee_N(sol):
-    return np.matmul(R0R0, sol.T).T
+def frisbee_N(sol, R0_0R):
+    return np.matmul(R0_0R, sol.T).T
 
-def initial_N_to_D(d1, d2, v1, v2):
-    return np.matmul(R0R0.T, np.array([d1, d2, v1, v2])).T
+def initial_N_to_D(d1, d2, v1, v2, R0_0R):
+    return np.matmul(R0_0R.T, np.array([d1, d2, v1, v2])).T
 
-y0 = initial_N_to_D(0, 0, 15, -15)         # zacetne v D ali N sistemu, v1 v D >= 0 drugace se obrne
-t = linspace(0, 10, 101)
-sol = odeint(frisbee_D, y0, t, args=(C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g))
+def plot_1_all(t, K, g, theta, C_dict, inital, inital_in_N=True):
+    R = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
+    R0_0R = np.block([[R, np.zeros((2,2))], [np.zeros((2,2)), R]])   # diagonalna blocna
 
-N_sistem = frisbee_N(sol)
+    C_L0, C_Lalpha, C_D0, C_Dalpha = C_dict['C_L0'], C_dict['C_Lalpha'], C_dict['C_D0'], C_dict['C_Dalpha']
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 8))
-ax1.plot(t, sol[:, 0], label='d1')
-ax1.plot(t, sol[:, 1], label='d2')
-ax1.plot(t, sol[:, 2], label='v1')
-ax1.plot(t, sol[:, 3], label='v2')
-ax1.legend(loc='best')
-ax1.grid(linestyle='--')
-ax1.legend(fancybox=False, edgecolor='black')
+    # zacetne v D ali N sistemu, v1 v D >= 0 drugace se obrne
+    x, y, vx, vy = inital
+    if inital_in_N:
+        y0 = initial_N_to_D(x, y, vx, vy, R0_0R)
+    else:
+        y0 = (x, y, vx, vy)
 
-ax2.plot(N_sistem[:, 0], N_sistem[:, 1], label='(d1, d2), N sistem')
-ax2.plot(sol[:, 0], sol[:, 1], label='(d1, d2), D sistem')
-ax2.legend(loc='best')
-ax2.grid(linestyle='--')
-ax2.legend(fancybox=False, edgecolor='black')
+    sol = odeint(frisbee_D, y0, t, args=(C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g))
+    N_sistem = frisbee_N(sol, R0_0R)
 
-ax3.plot(N_sistem[:, 2], N_sistem[:, 3], label='(v1, v2), N sistem')
-ax3.plot(sol[:, 2], sol[:, 3], label='(v1, v2), D sistem')
-ax3.legend(loc='best')
-ax3.grid(linestyle='--')
-ax3.legend(fancybox=False, edgecolor='black')
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 8))
+    ax1.plot(t, sol[:, 0], label='$d_1$')
+    ax1.plot(t, sol[:, 1], label='$d_2$')
+    ax1.plot(t, sol[:, 2], label='$v_1$')
+    ax1.plot(t, sol[:, 3], label='$v_2$')
+    ax1.legend(loc='best')
+    ax1.grid(linestyle='--')
+    ax1.legend(fancybox=False, edgecolor='black')
 
-plt.tight_layout()
-plt.show()
+    ax2.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), N sistem')
+    ax2.plot(sol[:, 0], sol[:, 1], label='$(d_1, d_2)$, D sistem')
+    ax2.legend(loc='best')
+    ax2.grid(linestyle='--')
+    ax2.legend(fancybox=False, edgecolor='black')
+    ax2.set_xlabel('x, d1 [m]')
+    ax2.set_ylabel('y, d2 [m]')
+    ax2.axis('equal')
+
+
+    ax3.plot(N_sistem[:, 2], N_sistem[:, 3], label='$(v_x, v_y)$, N sistem')
+    ax3.plot(sol[:, 2], sol[:, 3], label='$(v_{d1}, v_{d2})$, D sistem')
+    ax3.legend(loc='best')
+    ax3.grid(linestyle='--')
+    ax3.legend(fancybox=False, edgecolor='black')
+    ax3.set_xlabel('$v_x, v_{d1}$ [m/s]')
+    ax3.set_ylabel('$v_y, v_{d2}$ [m/s]')
+    plt.tight_layout()
+    plt.show()
+
+def plot_N_trajectories(t, K, g, theta_list, C_list, inital, inital_in_N=True):
+    # R = []
+    # R0_0R = []
+    # C_L0, C_Lalpha, C_D0, C_Dalpha = [], [], [], []
+    # for i in range(len(theta_list)):
+    #     R[i] = np.array([[np.cos(theta_list[i]), -np.sin(theta_list[i])], [np.sin(theta_list[i]), np.cos(theta_list[i])]])
+    #     R0_0R[i] = np.block([[R[i], np.zeros((2,2))], [np.zeros((2,2)), R[i]]])   # diagonalna blocna
+    #     C_L0[i], C_Lalpha[i], C_D0[i], C_Dalpha[i] = C_list[i]['C_L0'], C_list[i]['C_Lalpha'], C_list[i]['C_D0'], C_list[i]['C_Dalpha']
+
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize = (6, 4))    
+
+    for i in range(len(theta_list)):
+        R = np.array([[np.cos(theta_list[i]), -np.sin(theta_list[i])], [np.sin(theta_list[i]), np.cos(theta_list[i])]])
+        R0_0R = np.block([[R, np.zeros((2,2))], [np.zeros((2,2)), R]])   # diagonalna blocna
+        C_L0, C_Lalpha, C_D0, C_Dalpha = C_list[i]['C_L0'], C_list[i]['C_Lalpha'], C_list[i]['C_D0'], C_list[i]['C_Dalpha']
+        
+        # zacetne v D ali N sistemu, v1 v D >= 0 drugace se obrne
+        x, y, vx, vy = inital
+        if inital_in_N:
+            y0 = initial_N_to_D(x, y, vx, vy, R0_0R)
+        else:
+            y0 = (x, y, vx, vy)
+
+        sol = odeint(frisbee_D, y0, t, args=(C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g))
+        N_sistem = frisbee_N(sol, R0_0R)
+
+        ax.plot(N_sistem[:, 0], N_sistem[:, 1], label='C{}'. format(i + 1))
+        ax.legend(loc='best')
+        ax.grid(linestyle='--')
+        ax.legend(fancybox=False, edgecolor='black')
+        ax.set_xlabel('x [m]')
+        ax.set_ylabel('y [m]')
+        ax.axis('equal')
+        ax.set_title('N sistem')
+
+    plt.tight_layout()
+    plt.show()
+
+g = 9.8     
+m = 0.175
+A = 0.057
+ro = 1.23
+K = A * ro / (2 * m)
+
+# probaj se za C-je, video https://www.youtube.com/watch?v=BTiLOtF-LGY, 5:36, interpolacija
+C0_dict = {'C_L0':0.0, 'C_Lalpha':0.0, 'C_D0':0.0, 'C_Dalpha':0.0}
+C1_dict = {'C_L0':0.15, 'C_Lalpha':1.4, 'C_D0':0.08, 'C_Dalpha':2.72}   # clanek za_koeficiente1, za_koeficeinte2
+C2_dict = {'C_L0':0.188, 'C_Lalpha':2.37, 'C_D0':0.15, 'C_Dalpha':1.24} # clanek identification_of...
+C3_dict = {'C_L0':0.2, 'C_Lalpha':2.96, 'C_D0':0.08, 'C_Dalpha':2.60}   # -||-
+C4_dict = {'C_L0':-0.40, 'C_Lalpha':1.89, 'C_D0':0.83, 'C_Dalpha':0.83} # clanek frisbee_sim
+C5_dict = {'C_L0':1.17, 'C_Lalpha':0.28, 'C_D0':5.07, 'C_Dalpha':0.077} # -||-
+
+t = linspace(0, 2, 101)
+theta = np.pi / 180 * 25       # za alpha blizu pi/2 je C_D vecji kot za disk
+
+plot_1_all(t, K, g, theta, C2_dict, (0, 0, 15, -8))
+
+theta_list = np.ones(5) * np.pi / 9
+C_list = [C1_dict, C2_dict, C3_dict, C4_dict, C5_dict]
+plot_N_trajectories(t, K, g, theta_list, C_list, (0, 0, 15, -8))
