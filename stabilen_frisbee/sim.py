@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.core.function_base import linspace
 from scipy.integrate import odeint
 
 def frisbee_D(y, t, C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g):
@@ -119,7 +118,7 @@ C3_dict = {'C_L0':0.2, 'C_Lalpha':2.96, 'C_D0':0.08, 'C_Dalpha':2.60}   # -||-
 C4_dict = {'C_L0':-0.40, 'C_Lalpha':1.89, 'C_D0':0.83, 'C_Dalpha':0.83} # clanek frisbee_sim
 C5_dict = {'C_L0':1.17, 'C_Lalpha':0.28, 'C_D0':5.07, 'C_Dalpha':0.077} # -||-
 
-t = linspace(0, 2, 101)
+t = np.linspace(0, 2, 101)
 theta = np.pi / 180 * 25       # za alpha blizu pi/2 je C_D vecji kot za disk
 
 plot_1_all(t, K, g, theta, C2_dict, (0, 0, 15, -8))
