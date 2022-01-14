@@ -5,3 +5,4 @@ Težišče lifta, navor?
 Pithcing, rolling, magnus effect?
 
 Koeficiente (C-je) iz terminal hitrosti?
+Solve_ivp8(lsoda) ali odeint?
