@@ -123,8 +123,8 @@ C5_dict = {'C_L0':1.17, 'C_Lalpha':0.28, 'C_D0':5.07, 'C_Dalpha':0.077} # -||-
 t = np.linspace(0, 2, 101)
 theta = np.pi / 180 * 25       # za alpha blizu pi/2 je C_D vecji kot za disk
 
-plot_1_all(t, K, g, theta, C2_dict, (0, 0, 15, -8))
+# plot_1_all(t, K, g, theta, C2_dict, (0, 0, 15, -8))
 
-theta_list = np.ones(5) * np.pi / 9
+theta_list = np.ones(5) * np.pi / 180 * 20
 C_list = [C1_dict, C2_dict, C3_dict, C4_dict, C5_dict]
 plot_N_trajectories(t, K, g, theta_list, C_list, (0, 0, 15, -8))

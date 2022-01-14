@@ -1,8 +1,12 @@
 Preveri čas iznihanja frisbeeja, če se ga upogne?
+Vrtinci
+fazni diagram
 
 Simulacija kot https://www.youtube.com/watch?v=BTiLOtF-LGY?
 Težišče lifta, navor?
 Pithcing, rolling, magnus effect?
 
 Koeficiente (C-je) iz terminal hitrosti?
-Solve_ivp8(lsoda) ali odeint?
+wiki koeficienti
+Cut off
+Gravity disk
