@@ -66,7 +66,7 @@ def plot_1_all(t, K, g, theta, C_dict, inital, inital_in_N=True):
     plt.show()
 
 def plot_N_trajectories(t, K, g, theta_list, C_list, inital, inital_in_N=True):
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize = (6, 4))    
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize = (6, 4))  
 
     for i in range(len(theta_list)):
         R = np.array([[np.cos(theta_list[i]), -np.sin(theta_list[i])], [np.sin(theta_list[i]), np.cos(theta_list[i])]])
@@ -82,15 +82,14 @@ def plot_N_trajectories(t, K, g, theta_list, C_list, inital, inital_in_N=True):
 
         sol = odeint(frisbee_D, y0, t, args=(C_L0, C_Lalpha, C_D0, C_Dalpha, K, theta, g))
         N_sistem = frisbee_D_to_N(sol, R0_0R)
-
         ax.plot(N_sistem[:, 0], N_sistem[:, 1], label='C{}'. format(i + 1))
-        ax.legend(fancybox=False, prop={'size':9})
-        ax.grid(linestyle='--')
-        ax.set_xlabel('x [m]')
-        ax.set_ylabel('y [m]')
-        ax.axis('equal')
-        ax.set_title('N sistem')
 
+    ax.legend(fancybox=False, prop={'size':9})
+    ax.grid(linestyle='--')
+    ax.set_xlabel('x [m]')
+    ax.set_ylabel('y [m]')
+    ax.axis('equal')
+    ax.set_title('N sistem')     
     plt.tight_layout()
     plt.show()
 
@@ -115,10 +114,10 @@ C4_dict = {'C_L0':-0.40, 'C_Lalpha':1.89, 'C_D0':0.83, 'C_Dalpha':0.83} # clanek
 C5_dict = {'C_L0':1.17, 'C_Lalpha':0.28, 'C_D0':5.07, 'C_Dalpha':0.077} # -||-
 
 t = np.linspace(0, 2, 101)
-theta = np.pi / 180 * 20
+theta = np.pi / 180 * 25
 
-plot_1_all(t, K, g, theta, C2_dict, (0, 0, 15, -8))
+# plot_1_all(t, K, g, theta, C2_dict, (0, 0, 15, -8))
 
 theta_list = np.ones(5) * theta
 C_list = [C1_dict, C2_dict, C3_dict, C4_dict, C5_dict]
-plot_N_trajectories(t, K, g, theta_list, C_list, (0, 0, 15, -8))
+plot_N_trajectories(t, K, g, theta_list, C_list, (0, 0, 15, -5))
