@@ -1,5 +1,3 @@
-from audioop import lin2adpcm
-from cProfile import label
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
@@ -154,7 +152,7 @@ def plot_C_koef(C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     plt.title('C koeficienta')
     plt.show()
 
-t = np.linspace(0, 2, 101)
+t = np.linspace(0, 1, 101)
 
 theta = np.pi / 180 * 20
 stall_angle = np.pi / 180 * 45
