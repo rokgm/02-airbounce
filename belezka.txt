@@ -1,6 +1,7 @@
 Preveri čas iznihanja frisbeeja, če se ga upogne?
 Vrtinci
 fazni diagram
+lift to drag ratio
 
 Simulacija kot https://www.youtube.com/watch?v=BTiLOtF-LGY?
 Težišče lifta, navor?
