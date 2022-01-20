@@ -11,7 +11,7 @@ def frisbee_D(y, t, C_L, C_D, K, theta, g, stall_angle):
     alpha = np.arctan(-v2 / v1)
 
     if alpha > stall_angle:
-        warn('Angle of attack > stall_angle = {}°'.format(stall_angle * 180 / np.pi))
+        warn('Angle of attack > stall_angle => {}°'.format(stall_angle * 180 / np.pi))
 
     L1 = K * C_L(alpha) * (-v2) * v
     L2 = K * C_L(alpha) * v1 * v
@@ -100,7 +100,7 @@ def plot_N_trajectories(t, K, g, theta_list, C_L_list, C_D_list, stall_angle_lis
 
 def C_L_cutoff(C_L0, C_Lalpha, stall_angle):
     '''Lift cutoff pri stall angle: rad'''
-    a = (C_L0 + C_Lalpha * stall_angle) / (2 * (stall_angle - np.pi / 2)**2)
+    a = (C_L0 + C_Lalpha * stall_angle) / (1 * (stall_angle - np.pi / 2)**2)
 
     def C_L(alpha):
         if alpha >= stall_angle:
@@ -161,14 +161,13 @@ C_L = C_L_cutoff(0.2, 2.96, stall_angle)
 C_D = C_D_cutoff(0.08, 2.60, C_90)
 # plot_1_all(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, 15, -8))
 
-# plot_C_koef(0.2, 2.96, stall_angle, 0.08, 2.60, C_90)
-
-theta_list = np.ones(5) * np.pi * 25 / 180
-stall_angle_list = np.pi / 180 * np.array([15, 25, 35, 45, 55])     # nasteavljeno 2: skok
-C_90_list = np.ones((5)) * 1.1
+theta_list = np.ones(15) * np.pi * 25 / 180
+stall_angle_list = np.pi / 180 * np.arange(5, 90, 5)     # nastavljeno 1
+C_90_list = np.ones(15) * 1.1
 C_L_list = [(0.2, 2.96) for _ in theta_list]
 C_D_list = [(0.08, 2.60) for _ in theta_list]
 initial_list = [(0, 0, 15, -8) for _ in theta_list]
+# plot_C_koef(0.2, 2.96, stall_angle, 0.08, 2.60, C_90)
 
 C_L_list = [(C_L_list[i][0], C_L_list[i][1], stall_angle_list[i]) for i in range(len(theta_list))]
 C_D_list = [(C_D_list[i][0], C_D_list[i][1], stall_angle_list[i]) for i in range(len(theta_list))]
