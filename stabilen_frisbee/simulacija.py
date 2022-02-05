@@ -87,7 +87,7 @@ def plot_N_trajectories(t, K, g, theta_list, C_L_list, C_D_list, stall_angle_lis
 
         sol = odeint(frisbee_D, y0, t, args=(C_L_list[i], C_D_list[i], K, theta_list[i], g, stall_angle_list[i]))
         N_sistem = frisbee_D_to_N(sol, R0_0R)
-        ax.plot(N_sistem[:, 0], N_sistem[:, 1], label='n = {}'. format((i) * 5))   # prilagodi
+        ax.plot(N_sistem[:, 0], N_sistem[:, 1], label=r'$\theta$ = {}'. format((i) * 5))   # prilagodi
 
     ax.legend(fancybox=False, prop={'size':9})
     ax.grid(linestyle='--')
@@ -172,7 +172,7 @@ C_90_list = np.ones(7) * 1.1
 C_L_list = [(0.2, 2.96) for _ in theta_list]
 C_D_list = [(0.08, 2.60) for _ in theta_list]
 initial_list = [(0, 0, 15, -8) for _ in theta_list]
-plot_C_koef(0.2, 2.96, stall_angle, 0.08, 2.60, C_90)
+# plot_C_koef(0.2, 2.96, stall_angle, 0.08, 2.60, C_90)
 
 C_L_list = [(C_L_list[i][0], C_L_list[i][1], stall_angle_list[i]) for i in range(len(theta_list))]
 C_D_list = [(C_D_list[i][0], C_D_list[i][1], stall_angle_list[i]) for i in range(len(theta_list))]
