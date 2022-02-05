@@ -87,7 +87,7 @@ def plot_N_trajectories(t, K, g, theta_list, C_L_list, C_D_list, stall_angle_lis
 
         sol = odeint(frisbee_D, y0, t, args=(C_L_list[i], C_D_list[i], K, theta_list[i], g, stall_angle_list[i]))
         N_sistem = frisbee_D_to_N(sol, R0_0R)
-        ax.plot(N_sistem[:, 0], N_sistem[:, 1], label='n = {}'. format(i + 1))
+        ax.plot(N_sistem[:, 0], N_sistem[:, 1], label='n = {}'. format((i) * 5))   # prilagodi
 
     ax.legend(fancybox=False, prop={'size':9})
     ax.grid(linestyle='--')
@@ -96,6 +96,7 @@ def plot_N_trajectories(t, K, g, theta_list, C_L_list, C_D_list, stall_angle_lis
     ax.axis('equal')
     ax.set_title('N sistem')     
     plt.tight_layout()
+    # plt.savefig('med_razlicni_koti.png', dpi=600, bbox_inches='tight')
     plt.show()
 
 def C_L_cutoff(C_L0, C_Lalpha, stall_angle):
@@ -145,29 +146,33 @@ C5_dict = {'C_L0':1.17, 'C_Lalpha':0.28, 'C_D0':5.07, 'C_Dalpha':0.077} # -||-
 def plot_C_koef(C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     x = np.linspace(0, 1.5, 100)
     y = [C_L_cutoff(C_L0, C_Lalpha, stall_angle)(x) for x in x]
-    plt.plot(x, y, label='C_L')
+    plt.plot(x * 180 / np.pi, y, label='$C_L$')
     z = [C_D_cutoff(C_D0, C_Dalpha, C_90)(x) for x in x]
-    plt.plot(x, z, label='C_D')
+    plt.plot(x * 180 / np.pi, z, label='$C_D$')
+    plt.xlabel('angle of attack [$^\circ$]')
     plt.legend()
     plt.title('C koeficienta')
+    # plt.savefig('koeficienta_cutoff.png', dpi=600, bbox_inches='tight')
     plt.show()
 
 t = np.linspace(0, 1, 101)
 
 theta = np.pi / 180 * 20
-stall_angle = np.pi / 180 * 45
+stall_angle = np.pi / 180 * 25
 C_90 = 1.1
 C_L = C_L_cutoff(0.2, 2.96, stall_angle)
 C_D = C_D_cutoff(0.08, 2.60, C_90)
 # plot_1_all(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, 15, -8))
 
-theta_list = np.ones(15) * np.pi * 25 / 180
-stall_angle_list = np.pi / 180 * np.arange(5, 90, 5)     # nastavljeno 1
-C_90_list = np.ones(15) * 1.1
+theta_list = np.ones(7) * np.pi * 25 / 180
+theta_list = np.linspace(0, 30, 7) * np.pi / 180
+# stall_angle_list = np.pi / 180 * np.linspace(10, 40, 5)     # nastavljeno 1
+stall_angle_list = np.ones(7) * np.pi / 180 * 25
+C_90_list = np.ones(7) * 1.1
 C_L_list = [(0.2, 2.96) for _ in theta_list]
 C_D_list = [(0.08, 2.60) for _ in theta_list]
 initial_list = [(0, 0, 15, -8) for _ in theta_list]
-# plot_C_koef(0.2, 2.96, stall_angle, 0.08, 2.60, C_90)
+plot_C_koef(0.2, 2.96, stall_angle, 0.08, 2.60, C_90)
 
 C_L_list = [(C_L_list[i][0], C_L_list[i][1], stall_angle_list[i]) for i in range(len(theta_list))]
 C_D_list = [(C_D_list[i][0], C_D_list[i][1], stall_angle_list[i]) for i in range(len(theta_list))]
