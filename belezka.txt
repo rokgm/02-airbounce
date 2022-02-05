@@ -11,3 +11,4 @@ Koeficiente (C-je) iz terminal hitrosti?
 wiki koeficienti
 Cut off
 Gravity disk
+razlika, ce je precesija, ce je ni
