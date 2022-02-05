@@ -81,6 +81,7 @@
 \usepackage{subcaption}
 \usepackage{float}
 \usefonttheme{professionalfonts} 
+\setbeamertemplate{caption}[numbered]
 
 %\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
 %\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
@@ -196,7 +197,8 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 \end{itemize}
 \begin{figure}[H]
 	\centering
-	  \includegraphics[width=6cm]{koeficienta_cutoff.png}
+	  \includegraphics[width=5cm]{koeficienta_cutoff.png}
+	  \caption{Cutoff koeficientov}
 \end{figure}
 \end{frame}
 
@@ -204,10 +206,11 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 
 \begin{frame}
 \frametitle{Met: različni začetnimi koti.}
-Začetna hittrost = (15, -8) m/s
+
 \begin{figure}[H]
 	\centering
 	  \includegraphics[width=9cm]{med_razlicni_koti.png}
+	  \caption{Začetna hitrost = (15, -8) m/s. Začetni kot v stopinjah.}
 \end{figure}
 \end{frame}
 
