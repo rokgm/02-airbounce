@@ -12,3 +12,5 @@ wiki koeficienti
 Cut off
 Gravity disk
 razlika, ce je precesija, ce je ni
+
+Kako prilagoditi koeficiente za več metov?
