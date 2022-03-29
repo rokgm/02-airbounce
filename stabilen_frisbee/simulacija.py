@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
-from warnings import warn
+from scipy.optimize import curve_fit, minimize
 
 # D je koordinatni sistem diska ob t=0, N je koordinatni sistem x, y
 
@@ -11,7 +11,7 @@ def C_L_cutoff(C_L0, C_Lalpha, stall_angle):
 
     def C_L(alpha):
         if alpha >= stall_angle:
-            return a * (alpha - np.pi / 2)**2 ###### 2
+            return a * (alpha - np.pi / 2)**2 / 2 ###### 2
         else:
             return C_L0 + C_Lalpha * alpha
     return C_L
@@ -31,10 +31,6 @@ def frisbee_D(y, t, C_L, C_D, K, theta, g, stall_angle):
     d1, d2, v1, v2 = y
     v = (v1**2 + v2**2)**0.5
     alpha = np.arctan(-v2 / v1)
-
-    if alpha > stall_angle:
-        warn('Angle of attack > stall_angle => {}°'.format(stall_angle * 180 / np.pi))
-
     L1 = K * C_L(alpha) * (-v2) * v
     L2 = K * C_L(alpha) * v1 * v
     D1 = K * C_D(alpha) * (-v1) * v
@@ -76,6 +72,14 @@ def plot_C_koef(C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     plt.title('C koeficienta, manj oster stall cutoff')
     # plt.savefig('koeficienta_cutoff.png', dpi=600, bbox_inches='tight')
 
+def functional(x, t_eks1, x_eks1, y_eks1, K, g, stall_angle, initial_eks, C90):     # dodaj se stall angle ce dela
+    C_L0, C_Lalpha, C_D0, C_Dalpha = x
+    C_L = C_L_cutoff(C_L0, C_Lalpha, stall_angle)
+    C_D = C_D_cutoff(C_D0, C_Dalpha, C_90)
+    N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
+    distance_sqr = (N_sistem[:, 0] - x_eks1)**2 + (N_sistem[:, 1] - y_eks1)**2
+    return np.average(distance_sqr)
+
 g = 9.8
 m = 0.175
 A = 0.0616
@@ -85,41 +89,90 @@ K = A * ro / (2 * m)
 # EKSPERIMENT #
 t_eks1, x_eks1, y_eks1, vx_eks1, vy_eks1 = np.loadtxt('video_analiza_1.dat', unpack=True, max_rows=49)
 t_eks1 -= t_eks1[0]
+initial_eks = x_eks1[0], y_eks1[0], np.average(vx_eks1[0:3]), np.average(vy_eks1[0:3])
 ###############
 
-t = np.linspace(0, 1, 101)
 theta = np.pi / 180 * 12
 stall_angle = np.pi / 180 * 25
 C_90 = 1.1
-C_L = C_L_cutoff(0.188, 2.37, stall_angle)
-C_D = C_D_cutoff(0.15, 1.24, C_90)
-plot_C_koef(0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
 
-N_sistem = solution(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, 14, -3.8))[0]
-fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(nrows=2, ncols=2, figsize = (8, 6))
-ax1.plot(t, N_sistem[:, 0], label='$x$')
-ax1.plot(t, N_sistem[:, 1], label='$y$')
-ax1.plot(t, N_sistem[:, 2], label='$v_x$')
-ax1.plot(t, N_sistem[:, 3], label='$v_y$')
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 7))
+
+# clanek
+C_L = C_L_cutoff(0.188, 2.37, stall_angle)  # clanek
+C_D = C_D_cutoff(0.15, 1.24, C_90)
+# plot_C_koef(0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
+ax1.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), simulacija, N sistem')
+ax1.plot(x_eks1, y_eks1, label='(x, y), eksperiment')
 ax1.grid(linestyle='--')
-ax1.legend(fancybox=False, prop={'size':9})
-ax1.set_title('Simulacija')
+ax1.legend(fancybox=False, prop={'size':8})
+ax1.set_xlabel('x [m]')
+ax1.set_ylabel('y [m]')
+ax1.axis('equal')
+ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha \n [0.188, 2.37, 0.15, 1.24]')
+
+# method='Nelder-Mead'
+C_fit = minimize(functional, (0.188, 2.37, 0.15, 1.24), \
+    args=(t_eks1, x_eks1, y_eks1, K, g, stall_angle, initial_eks, C_90), method='Nelder-Mead', tol=1e-2)
+print(C_fit.x)
+C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
+C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
+# plot_C_koef(0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
 ax2.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), simulacija, N sistem')
-# EKSPERIMENT #
 ax2.plot(x_eks1, y_eks1, label='(x, y), eksperiment')
 ax2.grid(linestyle='--')
-ax2.legend(fancybox=False, prop={'size':9})
+ax2.legend(fancybox=False, prop={'size':8})
 ax2.set_xlabel('x [m]')
 ax2.set_ylabel('y [m]')
 ax2.axis('equal')
-ax2.set_title('Trajektorija')
-ax3.plot(t_eks1, x_eks1, label='$x$')
-ax3.plot(t_eks1, y_eks1, label='$y$')
-ax3.plot(t_eks1, vx_eks1, label='$v_x$')
-ax3.plot(t_eks1, vy_eks1, label='$v_y$')
+ax2.set_title('Minimization method=Nelder-Mead \n {}'.format(C_fit.x))
+
+# method='BFGS'
+C_fit = minimize(functional, (0.188, 2.37, 0.15, 1.24), \
+    args=(t_eks1, x_eks1, y_eks1, K, g, stall_angle, initial_eks, C_90), tol=1e-2)
+print(C_fit.x)
+C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
+C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
+# plot_C_koef(0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
+ax3.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), simulacija, N sistem')
+ax3.plot(x_eks1, y_eks1, label='(x, y), eksperiment')
 ax3.grid(linestyle='--')
-ax3.legend(fancybox=False, prop={'size':9})
-ax3.set_title('Eksperiment')
-###############
+ax3.legend(fancybox=False, prop={'size':8})
+ax3.set_xlabel('x [m]')
+ax3.set_ylabel('y [m]')
+ax3.axis('equal')
+ax3.set_title('Minimization method=default, BFGS \n {}'.format(C_fit.x))
+
 plt.tight_layout()
 plt.show()
+
+# fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(nrows=2, ncols=2, figsize = (8, 6))
+# ax1.plot(t_eks1, N_sistem[:, 0], label='$x$')
+# ax1.plot(t_eks1, N_sistem[:, 1], label='$y$')
+# ax1.plot(t_eks1, N_sistem[:, 2], label='$v_x$')
+# ax1.plot(t_eks1, N_sistem[:, 3], label='$v_y$')
+# ax1.grid(linestyle='--')
+# ax1.legend(fancybox=False, prop={'size':9})
+# ax1.set_title('Simulacija')
+# ax2.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), simulacija, N sistem')
+# # EKSPERIMENT #
+# ax2.plot(x_eks1, y_eks1, label='(x, y), eksperiment')
+# ax2.grid(linestyle='--')
+# ax2.legend(fancybox=False, prop={'size':9})
+# ax2.set_xlabel('x [m]')
+# ax2.set_ylabel('y [m]')
+# ax2.axis('equal')
+# ax2.set_title('Trajektorija')
+# ax3.plot(t_eks1, x_eks1, label='$x$')
+# ax3.plot(t_eks1, y_eks1, label='$y$')
+# ax3.plot(t_eks1, vx_eks1, label='$v_x$')
+# ax3.plot(t_eks1, vy_eks1, label='$v_y$')
+# ax3.grid(linestyle='--')
+# ax3.legend(fancybox=False, prop={'size':9})
+# ax3.set_title('Eksperiment')
+# ###############
+# plt.tight_layout()
+# plt.show()
