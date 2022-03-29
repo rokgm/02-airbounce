@@ -13,4 +13,5 @@ Cut off
 Gravity disk
 razlika, ce je precesija, ce je ni
 
+Preveč upora v x smeri.
 Errors.

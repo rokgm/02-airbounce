@@ -11,7 +11,7 @@ def C_L_cutoff(C_L0, C_Lalpha, stall_angle):
 
     def C_L(alpha):
         if alpha >= stall_angle:
-            return a * (alpha - np.pi / 2)**2 / 2 ###### 2
+            return a * (alpha - np.pi / 2)**2 / 1 ###### 1
         else:
             return C_L0 + C_Lalpha * alpha
     return C_L
@@ -72,8 +72,8 @@ def plot_C_koef(C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     plt.title('C koeficienta, manj oster stall cutoff')
     # plt.savefig('koeficienta_cutoff.png', dpi=600, bbox_inches='tight')
 
-def functional(x, t_eks1, x_eks1, y_eks1, K, g, stall_angle, initial_eks, C90):     # dodaj se stall angle ce dela
-    C_L0, C_Lalpha, C_D0, C_Dalpha = x
+def functional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C90):     # dodaj se stall angle ce dela
+    C_L0, C_Lalpha, C_D0, C_Dalpha, stall_angle = x
     C_L = C_L_cutoff(C_L0, C_Lalpha, stall_angle)
     C_D = C_D_cutoff(C_D0, C_Dalpha, C_90)
     N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
@@ -93,7 +93,7 @@ initial_eks = x_eks1[0], y_eks1[0], np.average(vx_eks1[0:3]), np.average(vy_eks1
 ###############
 
 theta = np.pi / 180 * 12
-stall_angle = np.pi / 180 * 25
+stall_angle = np.pi / 180 * 15
 C_90 = 1.1
 
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 7))
@@ -101,7 +101,7 @@ fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 7))
 # clanek
 C_L = C_L_cutoff(0.188, 2.37, stall_angle)  # clanek
 C_D = C_D_cutoff(0.15, 1.24, C_90)
-# plot_C_koef(0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+plot_C_koef(0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
 N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
 ax1.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), simulacija, N sistem')
 ax1.plot(x_eks1, y_eks1, label='(x, y), eksperiment')
@@ -110,11 +110,13 @@ ax1.legend(fancybox=False, prop={'size':8})
 ax1.set_xlabel('x [m]')
 ax1.set_ylabel('y [m]')
 ax1.axis('equal')
-ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha \n [0.188, 2.37, 0.15, 1.24]')
+ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha, stall_angle \n [0.188, 2.37, 0.15, 1.24, 0.26]')
 
+# minimizacija: stall, 1 ali 2, 15 ali 25
 # method='Nelder-Mead'
-C_fit = minimize(functional, (0.188, 2.37, 0.15, 1.24), \
-    args=(t_eks1, x_eks1, y_eks1, K, g, stall_angle, initial_eks, C_90), method='Nelder-Mead', tol=1e-2)
+C_fit = minimize(functional, (0.188, 2.37, 0.15, 1.24, 0.26), \
+    args=(t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90), method='Nelder-Mead', \
+         bounds = ((0.10, 0.22), (1.9, 2.7), (0.10, 0.19), (1.00, 1.40), (0.1, 0.5)), tol=1e-2)
 print(C_fit.x)
 C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
 C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
@@ -130,8 +132,9 @@ ax2.axis('equal')
 ax2.set_title('Minimization method=Nelder-Mead \n {}'.format(C_fit.x))
 
 # method='BFGS'
-C_fit = minimize(functional, (0.188, 2.37, 0.15, 1.24), \
-    args=(t_eks1, x_eks1, y_eks1, K, g, stall_angle, initial_eks, C_90), tol=1e-2)
+C_fit = minimize(functional, (0.188, 2.37, 0.15, 1.24, 0.26), \
+     args=(t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90), \
+     bounds = ((0.10, 0.22), (1.9, 2.7), (0.10, 0.19), (1.00, 1.40), (0.1, 0.5)), tol=1e-2)
 print(C_fit.x)
 C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
 C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
