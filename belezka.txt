@@ -13,5 +13,9 @@ Cut off
 Gravity disk
 razlika, ce je precesija, ce je ni
 
+https://www.researchgate.net/figure/Lift-coefficient-in-the-symmetrical-NACA-airfoils-with-thickness-varying-from-6-to-21_fig5_323253844
 Preveč upora v x smeri.
 Errors.
+Fit samo v začetnem delu: bounce
+Fit vse in povrpečje ali vse na enrkat?
+Za ravni med da določim C_L, C_D.
