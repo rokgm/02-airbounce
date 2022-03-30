@@ -70,7 +70,6 @@ def plot_C_koef(axes, C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     axes.set_xlabel('angle of attack [$^\circ$]')
     axes.legend()
     axes.set_title('C koeficienta, manj oster stall cutoff')
-    # plt.savefig('koeficienta_cutoff.png', dpi=600, bbox_inches='tight')
 
 def functional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle):     # dodaj se stall angle ce dela
     C_L0, C_Lalpha, C_D0, C_Dalpha = x
@@ -95,7 +94,6 @@ stall_angle = np.pi / 180 * 15
 C_90 = 1.1
 
 fig, ((ax1, axC1), (ax2, axC2), (ax3, axC3)) = plt.subplots(nrows=3, ncols=2, figsize = (10, 7))
-# fig_C, (axC1, axC2, axC3) = plt.subplots(nrows=3, ncols=1, figsize = (6, 7))
 
 # clanek
 C_L1 = C_L_cutoff(0.188, 2.37, stall_angle)  # clanek
@@ -151,7 +149,6 @@ ax3.axis('equal')
 ax3.set_title('Minimization method=default, BFGS \n {}'.format(C_fit.x))
 
 fig.tight_layout()
-# fig_C.tight_layout()
 plt.show()
 
 # fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(nrows=2, ncols=2, figsize = (8, 6))
