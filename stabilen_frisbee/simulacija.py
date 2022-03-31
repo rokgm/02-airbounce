@@ -76,10 +76,12 @@ def funkcional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, 
     C_L = C_L_cutoff(C_L0, C_Lalpha, stall_angle)
     C_D = C_D_cutoff(C_D0, C_Dalpha, C_90)
     N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
+    
     if weighted:
-        weights = np.exp(-t_eks1 * 10)
+        weights = np.exp(-t_eks1 * 3.)
     else:
         weights = 1.
+
     distance = weights * ((N_sistem[:, 0] - x_eks1)**2 + (N_sistem[:, 1] - y_eks1)**2)**0.5
     # distance_sqr = (N_sistem[:, 1] - y_eks1)**2
     return np.average(distance)    # ne kvadratno?

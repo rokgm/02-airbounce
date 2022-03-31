@@ -26,3 +26,6 @@ Errors.
 Fit samo v začetnem delu: bounce
 Fit vse in povrpečje ali vse na enrkat?
 Za ravni med da določim C_L, C_D.
+plot t(x)
+
+Perspektivna napaka
