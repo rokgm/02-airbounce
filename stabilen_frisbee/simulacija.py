@@ -69,15 +69,15 @@ def plot_C_koef(axes, C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     axes.plot(x * 180 / np.pi, z, label='$C_D$')
     axes.set_xlabel('angle of attack [$^\circ$]')
     axes.legend()
-    axes.set_title('C koeficienta, manj oster stall cutoff')
+    axes.set_title('C koeficienta')
 
-def functional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, weighted):     # dodaj se stall angle ce dela
+def funkcional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, weighted):     # dodaj se stall angle ce dela
     C_L0, C_Lalpha, C_D0, C_Dalpha = x
     C_L = C_L_cutoff(C_L0, C_Lalpha, stall_angle)
     C_D = C_D_cutoff(C_D0, C_Dalpha, C_90)
     N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
     if weighted:
-        weights = np.exp(-t_eks1 * 3.)
+        weights = np.exp(-t_eks1 * 10)
     else:
         weights = 1.
     distance = weights * ((N_sistem[:, 0] - x_eks1)**2 + (N_sistem[:, 1] - y_eks1)**2)**0.5
@@ -112,7 +112,7 @@ ax1.legend(fancybox=False, prop={'size':8})
 ax1.set_xlabel('x [m]')
 ax1.set_ylabel('y [m]')
 ax1.axis('equal')
-ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha, stall_angle \n [0.188, 2.37, 0.15, 1.24, 0.26]')
+ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha \n [0.188, 2.37, 0.15, 1.24]')
 
 # minimizacija: stall, 1 ali 2, 15 ali 25
 # mthd2='Nelder-Mead' # bolje za unbound in nekvadratno
@@ -122,7 +122,7 @@ mthd2='TNC' # bound in kvadratno
 # bnds2 = ((0.01, 1.), (0.01, 10.), (0.01, 10.), (0.01, 10.))
 bnds2 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
 # bnds2 = None
-C_fit2 = minimize(functional, (0.188, 2.37, 0.15, 1.24), \
+C_fit2 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
     args=(t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, True), \
          method=mthd2, bounds = bnds2, tol=1e-3)
 C_L2 = C_L_cutoff(C_fit2.x[0], C_fit2.x[1], stall_angle)  # 
@@ -146,7 +146,7 @@ mthd3='TNC'
 # bnds3 = ((0.01, 1.), (0.01, 10.), (0.01, 10.), (0.01, 10.))
 bnds3 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None)) # zakaj ce ne omejim dela bolje
 # bnds3 = None
-C_fit3 = minimize(functional, (0.188, 2.37, 0.15, 1.24), \
+C_fit3 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
      args=(t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, False), \
      method=mthd3, bounds = bnds3, tol=1e-3)
 C_L3 = C_L_cutoff(C_fit3.x[0], C_fit3.x[1], stall_angle)  # 
