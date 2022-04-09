@@ -12,11 +12,7 @@ wiki koeficienti
 Cut off
 Gravity disk
 razlika, ce je precesija, ce je ni
-
-Preveri framerate?
-Kako oceniti razdaljo? Razdalje med (x, y)(dobro za časovno) ali samo y?
-Ali hibridno, daljši časi manjša utež?
-Ali kvadratno, če so kasneje tako večje. Preveč prispevajo.
+Errors: določtev theta
 
 https://www.researchgate.net/figure/Lift-coefficient-in-the-symmetrical-NACA-airfoils-with-thickness-varying-from-6-to-21_fig5_323253844
 Preveč upora v x smeri. Kot pri snemanju: vpilv.
@@ -24,8 +20,11 @@ Odreži prvi del meta ko se vrti.
 Začetna hitrost povprečje prvih treh.
 Fit samo v začetnem delu: bounce
 Fit vse in povrpečje ali vse na enrkat?
-Za ravni med da določim C_L, C_D.
-plot t(x)
+theta se spreminja: fit povprečje
 
-Perspektivna napaka
-Errors: določtev theta
+Naredi:
+    theta v funkiocnal?
+    paralaksa 1. video
+    1. video theta v funkiocnal
+    za strmo probaj clanek koeficiente (skiprows)
+    plot t(x)
