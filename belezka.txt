@@ -22,10 +22,10 @@ https://www.researchgate.net/figure/Lift-coefficient-in-the-symmetrical-NACA-air
 Preveč upora v x smeri. Kot pri snemanju: vpilv.
 Odreži prvi del meta ko se vrti.
 Začetna hitrost povprečje prvih treh.
-Errors.
 Fit samo v začetnem delu: bounce
 Fit vse in povrpečje ali vse na enrkat?
 Za ravni med da določim C_L, C_D.
 plot t(x)
 
 Perspektivna napaka
+Errors: določtev theta
