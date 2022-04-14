@@ -24,7 +24,7 @@ theta se spreminja: fit povprečje
 
 Naredi:
     theta v funkiocnal?
-    paralaksa 1. video
+    paralaksa 1. video (zabeleži kako)
     1. video theta v funkiocnal
     za strmo probaj clanek koeficiente (skiprows)
     plot t(x)
