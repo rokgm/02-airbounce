@@ -1,6 +1,6 @@
 Preveri čas iznihanja frisbeeja, če se ga upogne?
 Vrtinci
-fazni diagram
+fazni diagram, magnituda-urkivljenost
 lift to drag ratio
 
 Simulacija kot https://www.youtube.com/watch?v=BTiLOtF-LGY?
@@ -13,6 +13,7 @@ Cut off
 Gravity disk
 razlika, ce je precesija, ce je ni
 Errors: določtev theta
+veter
 
 https://www.researchgate.net/figure/Lift-coefficient-in-the-symmetrical-NACA-airfoils-with-thickness-varying-from-6-to-21_fig5_323253844
 Preveč upora v x smeri. Kot pri snemanju: vpilv.
@@ -28,3 +29,4 @@ Naredi:
     1. video theta v funkiocnal
     za strmo probaj clanek koeficiente (skiprows)
     plot t(x)
+    označi začetne hitrosti in kote
