@@ -114,10 +114,8 @@ theta_1 = np.pi / 180 * 12
 initial_eks_1 = x_eks_1[0], y_eks_1[0], np.average(vx_eks_1[0:3]), np.average(vy_eks_1[0:3])
 
 # video_strmo
-theta_strmo = np.pi / 180 * np.array([28, 24, 35, 31, 24, 23, 24])
-theta_strmo = np.average(theta_strmo) # 27
-theta_strmo = np.pi / 180 * 19.19408 # preveri
-t_eks_strmo, x_eks_strmo, y_eks_strmo, vx_eks_strmo, vy_eks_strmo = np.loadtxt('video_analiza_strmo.dat', skiprows=0, unpack=True, max_rows=None)
+theta_strmo = np.pi / 180 * 19.19408 # kot se spreminja okoli 20; ce ga dam se v funkcional najde samo pri 19.19 minimum
+t_eks_strmo, x_eks_strmo, y_eks_strmo, vx_eks_strmo, vy_eks_strmo = np.loadtxt('video_analiza_strmo.dat', skiprows=3, unpack=True, max_rows=None)
 t_eks_strmo -= t_eks_strmo[0]
 x_eks_strmo -= x_eks_strmo[0]
 y_eks_strmo -= y_eks_strmo[0]
@@ -127,74 +125,72 @@ initial_eks_strmo = x_eks_strmo[0], y_eks_strmo[0], np.average(vx_eks_strmo[0:3]
 
 
 # ####### video_1
-fig, ((ax1, axC1), (ax2, axC2), (ax3, axC3)) = plt.subplots(nrows=3, ncols=2, figsize = (10, 7))
+# fig, ((ax1, axC1), (ax2, axC2), (ax3, axC3)) = plt.subplots(nrows=3, ncols=2, figsize = (10, 7))
 
-# clanek
-C_L1 = C_L_cutoff(0.188, 2.37, stall_angle)  # clanek
-C_D1 = C_D_cutoff(0.15, 1.24, C_90)
-plot_C_koef(axC1, 0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
-N_sistem1 = solution(t_eks_1, K, g, theta_1, C_L1, C_D1, stall_angle, initial_eks_1)[0]
-ax1.plot(N_sistem1[:, 0], N_sistem1[:, 1], '.', label='(x, y), simulacija, N sistem')
-ax1.plot(x_eks_1, y_eks_1, '.', label='(x, y), eksperiment')
-ax1.grid(linestyle='--')
-ax1.legend(fancybox=False, prop={'size':8})
-ax1.set_xlabel('x [m]')
-ax1.set_ylabel('y [m]')
-ax1.axis('equal')
-ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha \n [0.188, 2.37, 0.15, 1.24]')
+# # clanek
+# C_L1 = C_L_cutoff(0.188, 2.37, stall_angle)  # clanek
+# C_D1 = C_D_cutoff(0.15, 1.24, C_90)
+# plot_C_koef(axC1, 0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+# N_sistem1 = solution(t_eks_1, K, g, theta_1, C_L1, C_D1, stall_angle, initial_eks_1)[0]
+# ax1.plot(N_sistem1[:, 0], N_sistem1[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax1.plot(x_eks_1, y_eks_1, '.', label='(x, y), eksperiment')
+# ax1.grid(linestyle='--')
+# ax1.legend(fancybox=False, prop={'size':8})
+# ax1.set_xlabel('x [m]')
+# ax1.set_ylabel('y [m]')
+# ax1.axis('equal')
+# ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha \n [0.188, 2.37, 0.15, 1.24]')
 
-# mthd2='Nelder-Mead' # bolje za unbound in nekvadratno
-mthd2='TNC' # bound in kvadratno
-# mthd2='L-BFGS-B'
-# mthd2='SLSQP'
-# bnds2 = ((0.01, 1.), (0.01, 10.), (0.01, 10.), (0.01, 10.))
-bnds2 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
-# bnds2 = None
-weighted_1 = True
-C_fit2 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
-    args=(theta_1, t_eks_1, x_eks_1, y_eks_1, K, g, initial_eks_1, C_90, stall_angle, weighted_1), \
-         method=mthd2, bounds = bnds2, tol=1e-3)
-C_L2 = C_L_cutoff(C_fit2.x[0], C_fit2.x[1], stall_angle)  # 
-C_D2 = C_D_cutoff(C_fit2.x[2], C_fit2.x[3], C_90)
-plot_C_koef(axC2, C_fit2.x[0], C_fit2.x[1], stall_angle, C_fit2.x[2], C_fit2.x[3], C_90)
-N_sistem2 = solution(t_eks_1, K, g, theta_1, C_L2, C_D2, stall_angle, initial_eks_1)[0]
-ax2.plot(N_sistem2[:, 0], N_sistem2[:, 1], '.', label='(x, y), simulacija, N sistem')
-ax2.plot(x_eks_1, y_eks_1, '.', label='(x, y), eksperiment')
-ax2.grid(linestyle='--')
-ax2.legend(fancybox=False, prop={'size':8})
-ax2.set_xlabel('x [m]')
-ax2.set_ylabel('y [m]')
-ax2.axis('equal')
-ax2.set_title('Minimization method={}, w={} \n {}'.format(mthd2, weighted_1, C_fit2.x))
+# # mthd2='Nelder-Mead'
+# mthd2='TNC'
+# # mthd2='L-BFGS-B'
+# # mthd2='SLSQP'
+# bnds2 = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# # bnds2 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# # bnds2 = None
+# weighted_1 = True
+# C_fit2 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
+#     args=(theta_1, t_eks_1, x_eks_1, y_eks_1, K, g, initial_eks_1, C_90, stall_angle, weighted_1), \
+#          method=mthd2, bounds = bnds2, tol=1e-3)
+# C_L2 = C_L_cutoff(C_fit2.x[0], C_fit2.x[1], stall_angle)  # 
+# C_D2 = C_D_cutoff(C_fit2.x[2], C_fit2.x[3], C_90)
+# plot_C_koef(axC2, C_fit2.x[0], C_fit2.x[1], stall_angle, C_fit2.x[2], C_fit2.x[3], C_90)
+# N_sistem2 = solution(t_eks_1, K, g, theta_1, C_L2, C_D2, stall_angle, initial_eks_1)[0]
+# ax2.plot(N_sistem2[:, 0], N_sistem2[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax2.plot(x_eks_1, y_eks_1, '.', label='(x, y), eksperiment')
+# ax2.grid(linestyle='--')
+# ax2.legend(fancybox=False, prop={'size':8})
+# ax2.set_xlabel('x [m]')
+# ax2.set_ylabel('y [m]')
+# ax2.axis('equal')
+# ax2.set_title('Minimization method={}, w={} \n {}'.format(mthd2, weighted_1, C_fit2.x))
 
-# mthd3='Nelder-Mead'
-mthd3='TNC'
-# mthd3='L-BFGS-B'
-# mthd3='SLSQP'
-# bnds3 = ((0.10, 0.22), (1.9, 2.7), (0.10, 0.19), (1.00, 1.40))
-# bnds3 = ((0.01, 1.), (0.01, 10.), (0.01, 10.), (0.01, 10.))
-bnds3 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None)) # zakaj ce ne omejim dela bolje
-# bnds3 = None
-weighted_1 = False
-C_fit3 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
-     args=(theta_1, t_eks_1, x_eks_1, y_eks_1, K, g, initial_eks_1, C_90, stall_angle, weighted_1), \
-     method=mthd3, bounds = bnds3, tol=1e-3)
-C_L3 = C_L_cutoff(C_fit3.x[0], C_fit3.x[1], stall_angle)  # 
-C_D3 = C_D_cutoff(C_fit3.x[2], C_fit3.x[3], C_90)
-plot_C_koef(axC3, C_fit3.x[0], C_fit3.x[1], stall_angle, C_fit3.x[2], C_fit3.x[3], C_90)
-N_sistem3 = solution(t_eks_1, K, g, theta_1, C_L3, C_D3, stall_angle, initial_eks_1)[0]
-ax3.plot(N_sistem3[:, 0], N_sistem3[:, 1], '.', label='(x, y), simulacija, N sistem')
-ax3.plot(x_eks_1, y_eks_1, '.', label='(x, y), eksperiment')
-ax3.grid(linestyle='--')
-ax3.legend(fancybox=False, prop={'size':8})
-ax3.set_xlabel('x [m]')
-ax3.set_ylabel('y [m]')
-ax3.axis('equal')
-ax3.set_title('Minimization method={}, w={} \n {}'.format(mthd3, weighted_1, C_fit3.x))
+# # mthd3='Nelder-Mead'
+# mthd3='TNC'
+# # mthd3='L-BFGS-B'
+# # mthd3='SLSQP'
+# bnds3 = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# # bnds3 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# # bnds3 = None
+# weighted_1 = False
+# C_fit3 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
+#      args=(theta_1, t_eks_1, x_eks_1, y_eks_1, K, g, initial_eks_1, C_90, stall_angle, weighted_1), \
+#      method=mthd3, bounds = bnds3, tol=1e-3)
+# C_L3 = C_L_cutoff(C_fit3.x[0], C_fit3.x[1], stall_angle)  # 
+# C_D3 = C_D_cutoff(C_fit3.x[2], C_fit3.x[3], C_90)
+# plot_C_koef(axC3, C_fit3.x[0], C_fit3.x[1], stall_angle, C_fit3.x[2], C_fit3.x[3], C_90)
+# N_sistem3 = solution(t_eks_1, K, g, theta_1, C_L3, C_D3, stall_angle, initial_eks_1)[0]
+# ax3.plot(N_sistem3[:, 0], N_sistem3[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax3.plot(x_eks_1, y_eks_1, '.', label='(x, y), eksperiment')
+# ax3.grid(linestyle='--')
+# ax3.legend(fancybox=False, prop={'size':8})
+# ax3.set_xlabel('x [m]')
+# ax3.set_ylabel('y [m]')
+# ax3.axis('equal')
+# ax3.set_title('Minimization method={}, w={} \n {}'.format(mthd3, weighted_1, C_fit3.x))
 
-fig.tight_layout()
-plt.show()
-###### konec video_1
+# fig.tight_layout()
+# ###### konec video_1
 
 
 ####### video_strmo
@@ -244,6 +240,165 @@ plt.show()
 # ax1.set_title('Simulacija')
 # ## konec vse
 
+# fig, ((ax1, axC1), (ax2, axC2), (ax3, axC3)) = plt.subplots(nrows=3, ncols=2, figsize = (10, 7))
+# # clanek
+# C_L1 = C_L_cutoff(0.188, 2.37, stall_angle)  # clanek
+# C_D1 = C_D_cutoff(0.15, 1.24, C_90)
+# plot_C_koef(axC1, 0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+# N_sistem1 = solution(t_eks_strmo, K, g, theta_strmo, C_L1, C_D1, stall_angle, initial_eks_strmo)[0]
+# ax1.plot(N_sistem1[:, 0], N_sistem1[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax1.plot(x_eks_strmo, y_eks_strmo, '.', label='(x, y), eksperiment')
+# ax1.grid(linestyle='--')
+# ax1.legend(fancybox=False, prop={'size':8})
+# ax1.set_xlabel('x [m]')
+# ax1.set_ylabel('y [m]')
+# ax1.axis('equal')
+# ax1.set_title('Članek: C_L0, C_Lalpha, C_D0, C_Dalpha \n [0.188, 2.37, 0.15, 1.24]')
+
+# mthd2='Nelder-Mead'
+# # mthd2='TNC'
+# # mthd2='L-BFGS-B'
+# # mthd2='SLSQP'
+# bnds2 = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# # bnds2 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# # bnds2 = None
+# weighted_strmo = True
+# C_fit2 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
+#     args=(theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, K, g, initial_eks_strmo, C_90, stall_angle, weighted_strmo), \
+#          method=mthd2, bounds = bnds2, tol=1e-3)
+# C_L2 = C_L_cutoff(C_fit2.x[0], C_fit2.x[1], stall_angle)
+# C_D2 = C_D_cutoff(C_fit2.x[2], C_fit2.x[3], C_90)
+# plot_C_koef(axC2, C_fit2.x[0], C_fit2.x[1], stall_angle, C_fit2.x[2], C_fit2.x[3], C_90)
+# N_sistem2 = solution(t_eks_strmo, K, g, theta_strmo, C_L2, C_D2, stall_angle, initial_eks_strmo)[0]
+# ax2.plot(N_sistem2[:, 0], N_sistem2[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax2.plot(x_eks_strmo, y_eks_strmo, '.', label='(x, y), eksperiment')
+# ax2.grid(linestyle='--')
+# ax2.legend(fancybox=False, prop={'size':8})
+# ax2.set_xlabel('x [m]')
+# ax2.set_ylabel('y [m]')
+# ax2.axis('equal')
+# ax2.set_title('Minimization method={}, w={} \n {}'.format(mthd2, weighted_strmo, C_fit2.x))
+
+# mthd3='Nelder-Mead'
+# # mthd3='TNC'
+# # mthd3='L-BFGS-B'
+# # mthd3='SLSQP'
+# bnds3 = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# # bnds3 = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# # bnds3 = None
+# weighted_strmo = False
+# C_fit3 = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
+#      args=(theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, K, g, initial_eks_strmo, C_90, stall_angle, weighted_strmo), \
+#      method=mthd3, bounds = bnds3, tol=1e-3)
+# C_L3 = C_L_cutoff(C_fit3.x[0], C_fit3.x[1], stall_angle)  # 
+# C_D3 = C_D_cutoff(C_fit3.x[2], C_fit3.x[3], C_90)
+# plot_C_koef(axC3, C_fit3.x[0], C_fit3.x[1], stall_angle, C_fit3.x[2], C_fit3.x[3], C_90)
+# N_sistem3 = solution(t_eks_strmo, K, g, theta_strmo, C_L3, C_D3, stall_angle, initial_eks_strmo)[0]
+# ax3.plot(N_sistem3[:, 0], N_sistem3[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax3.plot(x_eks_strmo, y_eks_strmo, '.', label='(x, y), eksperiment')
+# ax3.grid(linestyle='--')
+# ax3.legend(fancybox=False, prop={'size':8})
+# ax3.set_xlabel('x [m]')
+# ax3.set_ylabel('y [m]')
+# ax3.axis('equal')
+# ax3.set_title('Minimization method={}, w={} \n {}'.format(mthd3, weighted_strmo, C_fit3.x))
+
 # plt.tight_layout()
-# plt.show()
 ##### konec video_strmo
+
+
+def funkcional_skupaj(x, lst, K, g, C_90, stall_angle, weighted):
+    C_L0, C_Lalpha, C_D0, C_Dalpha= x
+    C_L = C_L_cutoff(C_L0, C_Lalpha, stall_angle)
+    C_D = C_D_cutoff(C_D0, C_Dalpha, C_90)
+    distance = 0.
+    for e in lst:
+        theta, t_eks1, x_eks1, y_eks1, initial_eks = e
+        N_sistem = solution(t_eks1, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
+    
+        if weighted:
+            weights = np.exp(-t_eks1 * 3.)
+        else:
+            weights = 1.
+
+        distance += np.average(weights * ((N_sistem[:, 0] - x_eks1)**2 + (N_sistem[:, 1] - y_eks1)**2))
+    return np.average(distance)
+
+fig, ((ax1, axC1), (ax2, axC2), (ax3, axC3), (ax4, axC4)) = plt.subplots(nrows=4, ncols=2, figsize = (10, 9))
+
+# mthd='Nelder-Mead'
+mthd='TNC'
+# mthd='L-BFGS-B'
+# mthd='SLSQP'
+bnds = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# bnds = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# bnds = None
+weighted = True
+C_fit = minimize(funkcional_skupaj, (0.188, 2.37, 0.15, 1.24), \
+    args=([(theta_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1), \
+        (theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo)], \
+             K, g, C_90, stall_angle, weighted), \
+         method=mthd, bounds = bnds, tol=1e-3)
+C_L2 = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
+C_D2 = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
+plot_C_koef(axC1, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
+N_sistem_1 = solution(t_eks_1, K, g, theta_1, C_L2, C_D2, stall_angle, initial_eks_1)[0]
+N_sistem_strmo = solution(t_eks_strmo, K, g, theta_strmo, C_L2, C_D2, stall_angle, initial_eks_strmo)[0]
+ax1.plot(N_sistem_1[:, 0], N_sistem_1[:, 1], '.', label='video_1 simulacija')
+ax1.plot(x_eks_1, y_eks_1, '.', label='video_1, eksperiment')
+ax1.grid(linestyle='--')
+ax1.legend(fancybox=False, prop={'size':8})
+ax1.set_xlabel('x [m]')
+ax1.set_ylabel('y [m]')
+ax1.axis('equal')
+ax1.set_title('Minimization method={}, w={} \n {}'.format(mthd, weighted, C_fit.x))
+plot_C_koef(axC2, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
+ax2.plot(N_sistem_strmo[:, 0], N_sistem_strmo[:, 1], '.', label='video_strmo simulacija')
+ax2.plot(x_eks_strmo, y_eks_strmo, '.', label='video_strmo, eksperiment')
+ax2.grid(linestyle='--')
+ax2.legend(fancybox=False, prop={'size':8})
+ax2.set_xlabel('x [m]')
+ax2.set_ylabel('y [m]')
+ax2.axis('equal')
+ax2.set_title('Minimization method={}, w={} \n {}'.format(mthd, weighted, C_fit.x))
+
+
+# mthd='Nelder-Mead'
+mthd='TNC'
+# mthd='L-BFGS-B'
+# mthd='SLSQP'
+bnds = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# bnds = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# bnds = None
+weighted = False
+C_fit = minimize(funkcional_skupaj, (0.188, 2.37, 0.15, 1.24), \
+    args=([(theta_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1), \
+        (theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo)], \
+             K, g, C_90, stall_angle, weighted), \
+         method=mthd, bounds = bnds, tol=1e-3)
+C_L2 = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
+C_D2 = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
+plot_C_koef(axC3, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
+N_sistem_1 = solution(t_eks_1, K, g, theta_1, C_L2, C_D2, stall_angle, initial_eks_1)[0]
+N_sistem_strmo = solution(t_eks_strmo, K, g, theta_strmo, C_L2, C_D2, stall_angle, initial_eks_strmo)[0]
+ax3.plot(N_sistem_1[:, 0], N_sistem_1[:, 1], '.', label='video_1 simulacija')
+ax3.plot(x_eks_1, y_eks_1, '.', label='video_1, eksperiment')
+ax3.grid(linestyle='--')
+ax3.legend(fancybox=False, prop={'size':8})
+ax3.set_xlabel('x [m]')
+ax3.set_ylabel('y [m]')
+ax3.axis('equal')
+ax3.set_title('Minimization method={}, w={} \n {}'.format(mthd, weighted, C_fit.x))
+plot_C_koef(axC4, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
+ax4.plot(N_sistem_strmo[:, 0], N_sistem_strmo[:, 1], '.', label='video_strmo simulacija')
+ax4.plot(x_eks_strmo, y_eks_strmo, '.', label='video_strmo, eksperiment')
+ax4.grid(linestyle='--')
+ax4.legend(fancybox=False, prop={'size':8})
+ax4.set_xlabel('x [m]')
+ax4.set_ylabel('y [m]')
+ax4.axis('equal')
+ax4.set_title('Minimization method={}, w={} \n {}'.format(mthd, weighted, C_fit.x))
+
+fig.tight_layout()
+
+plt.show()

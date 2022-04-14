@@ -20,13 +20,13 @@
   <GraphMatchNumSections>0</GraphMatchNumSections>
   <Stationery>0</Stationery>
   <CreationDateTime>24/03/2022 18:47:16</CreationDateTime>
-  <ModifiedDateTime>02/04/2022 00:46:08</ModifiedDateTime>
-  <PageBounds>0 0 21.3 10.6083333333</PageBounds>
-  <ScreenResolution>0 0 2559 1439</ScreenResolution>
+  <ModifiedDateTime>14/04/2022 16:06:49</ModifiedDateTime>
+  <PageBounds>0 0 15.9666666667 7.60833333333</PageBounds>
+  <ScreenResolution>0 0 1919 1079</ScreenResolution>
   <MathType>0</MathType>
   <AllowOptionsDialogs>1</AllowOptionsDialogs>
   <AllowAutoCurveFit>1</AllowAutoCurveFit>
-  <ReplayWindowPosition>0 81 135 400 324 1</ReplayWindowPosition>
+  <ReplayWindowPosition>0 60 101 379 290 1</ReplayWindowPosition>
   <ReplayWindowSpeed>1</ReplayWindowSpeed>
   <ReplayWindowRepeat>0</ReplayWindowRepeat>
   <SensorConflictEnabled>1</SensorConflictEnabled>
@@ -59,12 +59,12 @@
     <PageGraphPaper>0 </PageGraphPaper>
     <PageGraphPaperLineSpacing>0.25 </PageGraphPaperLineSpacing>
     <PageGraphPaperLineColor>0x8484 0x7070 0xffff| 0xffff 0xffffffff</PageGraphPaperLineColor>
-    <PageReplayWindowPosition>0 81 135 400 324</PageReplayWindowPosition>
+    <PageReplayWindowPosition>0 60 101 379 290</PageReplayWindowPosition>
     <PageTable>
       <ID>107 </ID>
       <BroadcastTo>0 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>0.009 0.00895078000006 4.9427 10.5994 </Bounds>
+      <Bounds>0.00674647887324 0.00641953035356 3.70509123631 7.60192631581 </Bounds>
       <SubordinateToID>0</SubordinateToID>
       <SubordinateOffset>0 0</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
@@ -84,16 +84,16 @@
         <Name>Arial</Name>
         <Rotation>0</Rotation>
       </Font>
-      <TableColumn> 112 0.8 </TableColumn>
-      <TableColumn> 114 0.8 </TableColumn>
-      <TableColumn> 116 0.8 </TableColumn>
-      <TableColumn> 118 0.8 </TableColumn>
-      <TableColumn> 121 0.8 </TableColumn>
-      <TableColumn> 128 0.8 </TableColumn>
-      <TableColumn> 130 0.8 </TableColumn>
-      <TableColumn> 132 0.8 </TableColumn>
-      <TableColumn> 134 0.8 </TableColumn>
-      <TableColumn> 137 0.8 </TableColumn>
+      <TableColumn> 112 0.599687010955 </TableColumn>
+      <TableColumn> 114 0.599687010955 </TableColumn>
+      <TableColumn> 116 0.599687010955 </TableColumn>
+      <TableColumn> 118 0.599687010955 </TableColumn>
+      <TableColumn> 121 0.599687010955 </TableColumn>
+      <TableColumn> 128 0.599687010955 </TableColumn>
+      <TableColumn> 130 0.599687010955 </TableColumn>
+      <TableColumn> 132 0.599687010955 </TableColumn>
+      <TableColumn> 134 0.599687010955 </TableColumn>
+      <TableColumn> 137 0.599687010955 </TableColumn>
       <StartIndex> 6 </StartIndex>
       <DisplayBlackAndWhite> 0 </DisplayBlackAndWhite>
     </PageTable>
@@ -101,7 +101,7 @@
       <ID>106 </ID>
       <BroadcastTo>0 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>5.01736 0.0202677000002 21.3 8.62973000006 </Bounds>
+      <Bounds>3.7610570266 0.0145360644935 15.9666666667 6.18927218388 </Bounds>
       <SubordinateToID>0</SubordinateToID>
       <SubordinateOffset>3.63333 0.00833333</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
@@ -174,7 +174,7 @@
       <ID>127 </ID>
       <BroadcastTo>0 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>15.3 1.90000000001 21.3 5.90000000002 </Bounds>
+      <Bounds>11.4690140845 1.36268656718 15.9666666667 4.2315003928 </Bounds>
       <SubordinateToID>0</SubordinateToID>
       <SubordinateOffset>0 0</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
@@ -245,9 +245,9 @@
     </PageGraphCartesian>
     <PageMovie>
       <ID>125 </ID>
-      <BroadcastTo>3 146 150 151 </BroadcastTo>
+      <BroadcastTo>3 180 183 185 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>3.3842120098 0 19.9164667996 9.77753118642 </Bounds>
+      <Bounds>2.61732358046 0 15.1309939236 7.50033333333 </Bounds>
       <SubordinateToID>0</SubordinateToID>
       <SubordinateOffset>2.66666666667 -0.691666666667</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
@@ -267,7 +267,7 @@
         <Name>Arial</Name>
         <Rotation>0</Rotation>
       </Font>
-      <QTAbsolutePath>WD:\uporabik\Documents\Faks\02-airbounce\video_analiza\video_1.mp4</QTAbsolutePath>
+      <QTAbsolutePath>WC:\Users\rokgr\Dokumenti\Faks\02-airbounce\video_analiza\video_1.mp4</QTAbsolutePath>
       <QTRelativePath>Wvideo_1.mp4</QTRelativePath>
       <QTDeinterlaceMovie>0</QTDeinterlaceMovie>
       <QTCorrectForAspectRatio>0</QTCorrectForAspectRatio>
@@ -279,14 +279,14 @@
       <QTTopMovieControllerVisible_3_5>1</QTTopMovieControllerVisible_3_5>
       <QTMovieControlOffsets>0 0.21953125 0.341666666667 0.383333333333 </QTMovieControlOffsets>
       <QTMovieVAEnabled>1</QTMovieVAEnabled>
-      <QTMovieCurrentMovieTime>1716</QTMovieCurrentMovieTime>
+      <QTMovieCurrentMovieTime>1633</QTMovieCurrentMovieTime>
       <VAMovieData>1</VAMovieData>
       <VAType>0</VAType>
       <VAMovieStartScalePoint>0 0 </VAMovieStartScalePoint>
-      <VAMovieEndScalePoint>0.00903594555683 0 </VAMovieEndScalePoint>
+      <VAMovieEndScalePoint>0.00679317895691 0 </VAMovieEndScalePoint>
       <VAMovieActualDistance>1</VAMovieActualDistance>
-      <VAMoviePixelDistance>0.00903594555683</VAMoviePixelDistance>
-      <VAMovieOrigin>0 10.0139772479 </VAMovieOrigin>
+      <VAMoviePixelDistance>0.00679317895691</VAMoviePixelDistance>
+      <VAMovieOrigin>0 7.52845832102 </VAMovieOrigin>
       <VAMovieDataSetInfo>1 126 128 130 132 0 0</VAMovieDataSetInfo>
       <VAMovieDataSetID>126</VAMovieDataSetID>
       <VAMovieBaseColumnID>128</VAMovieBaseColumnID>
@@ -310,14 +310,14 @@
       <QTMovieOverrideRate>60.1554126474</QTMovieOverrideRate>
     </PageMovie>
     <PageHelperPhotoDistance>
-      <ID>146 </ID>
+      <ID>183 </ID>
       <BroadcastTo>0 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>5.13298891657 6.06919060326 5.54412309626 6.35283904076 </Bounds>
+      <Bounds>14.1541666667 4.13333333333 14.5653008464 4.41698177083 </Bounds>
       <SubordinateToID>125</SubordinateToID>
-      <SubordinateOffset>1.74877690677 6.06919060326</SubordinateOffset>
+      <SubordinateOffset>11.5368430862 4.13333333333</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
-      <BackgroundColor>0xffff 0xffff 0xffff| 0xffff 0xffffffff</BackgroundColor>
+      <BackgroundColor>0xffff 0xffff 0xffff| 0xffff 0x0</BackgroundColor>
       <AddNewData>0</AddNewData>
       <Locked>0</Locked>
       <AutoCreated>0</AutoCreated>
@@ -333,20 +333,20 @@
         <Name>Arial</Name>
         <Rotation>0</Rotation>
       </Font>
-      <PageHelperPhotoDistanceRatio0>0.105781621621 0.584435398951</PageHelperPhotoDistanceRatio0>
-      <PageHelperPhotoDistanceRatio1>0.129457928524 0.582618802514</PageHelperPhotoDistanceRatio1>
+      <PageHelperPhotoDistanceRatio0>0.945777709148 0.530600748765</PageHelperPhotoDistanceRatio0>
+      <PageHelperPhotoDistanceRatio1>0.973847587842 0.528184403397</PageHelperPhotoDistanceRatio1>
       <PageHelperPhotoDistancePrecisionDecimal>0</PageHelperPhotoDistancePrecisionDecimal>
       <PageHelperPhotoDistancePrecision>4</PageHelperPhotoDistancePrecision>
     </PageHelperPhotoDistance>
     <PageHelperPhotoDistance>
-      <ID>150 </ID>
+      <ID>180 </ID>
       <BroadcastTo>0 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>19.3046671986 5.68988891304 19.7158013782 5.97353735054 </Bounds>
+      <Bounds>3.97916666667 4.58333333333 4.39030084635 4.86698177083 </Bounds>
       <SubordinateToID>125</SubordinateToID>
-      <SubordinateOffset>15.9204551888 5.68988891304</SubordinateOffset>
+      <SubordinateOffset>1.3618430862 4.58333333333</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
-      <BackgroundColor>0xffff 0xffff 0xffff| 0xffff 0xffffffff</BackgroundColor>
+      <BackgroundColor>0xffff 0xffff 0xffff| 0xffff 0x0</BackgroundColor>
       <AddNewData>0</AddNewData>
       <Locked>0</Locked>
       <AutoCreated>0</AutoCreated>
@@ -362,20 +362,20 @@
         <Name>Arial</Name>
         <Rotation>0</Rotation>
       </Font>
-      <PageHelperPhotoDistanceRatio0>0.906714644703 0.533112948702</PageHelperPhotoDistanceRatio0>
-      <PageHelperPhotoDistanceRatio1>0.933433036154 0.527219185882</PageHelperPhotoDistanceRatio1>
+      <PageHelperPhotoDistanceRatio0>0.0146792939179 0.551139684395</PageHelperPhotoDistanceRatio0>
+      <PageHelperPhotoDistanceRatio1>0.0359028607357 0.546306993659</PageHelperPhotoDistanceRatio1>
       <PageHelperPhotoDistancePrecisionDecimal>0</PageHelperPhotoDistancePrecisionDecimal>
       <PageHelperPhotoDistancePrecision>4</PageHelperPhotoDistancePrecision>
     </PageHelperPhotoDistance>
     <PageHelperPhotoDistance>
-      <ID>151 </ID>
+      <ID>185 </ID>
       <BroadcastTo>0 </BroadcastTo>
       <Visible>1</Visible>
-      <Bounds>9.47090511374 6.20376089062 9.88203929343 6.48740932812 </Bounds>
+      <Bounds>2.72083333333 4.55 3.13196751302 4.8336484375 </Bounds>
       <SubordinateToID>125</SubordinateToID>
-      <SubordinateOffset>6.08669310394 6.20376089062</SubordinateOffset>
+      <SubordinateOffset>0.10350975287 4.55</SubordinateOffset>
       <BackgroundTransparent>0</BackgroundTransparent>
-      <BackgroundColor>0xffff 0xffff 0xffff| 0xffff 0xffffffff</BackgroundColor>
+      <BackgroundColor>0xffff 0xffff 0xffff| 0xffff 0x0</BackgroundColor>
       <AddNewData>0</AddNewData>
       <Locked>0</Locked>
       <AutoCreated>0</AutoCreated>
@@ -391,8 +391,8 @@
         <Name>Arial</Name>
         <Rotation>0</Rotation>
       </Font>
-      <PageHelperPhotoDistanceRatio0>0.337517483953 0.580263051264</PageHelperPhotoDistanceRatio0>
-      <PageHelperPhotoDistanceRatio1>0.360896076473 0.577737152913</PageHelperPhotoDistanceRatio1>
+      <PageHelperPhotoDistanceRatio0>0.0146792939179 0.554764202447</PageHelperPhotoDistanceRatio0>
+      <PageHelperPhotoDistanceRatio1>0.0359028607357 0.545098820974</PageHelperPhotoDistanceRatio1>
       <PageHelperPhotoDistancePrecisionDecimal>0</PageHelperPhotoDistancePrecisionDecimal>
       <PageHelperPhotoDistancePrecision>4</PageHelperPhotoDistancePrecision>
     </PageHelperPhotoDistance>
