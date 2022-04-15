@@ -1,32 +1,19 @@
 Preveri čas iznihanja frisbeeja, če se ga upogne?
 Vrtinci
-fazni diagram, magnituda-urkivljenost
+fazni diagram, magnituda-urkivljenost, razdalje kje je bounce
 lift to drag ratio
+stall angle utemeljitev z reynoldsovim stevilom
 
-Simulacija kot https://www.youtube.com/watch?v=BTiLOtF-LGY?
-Težišče lifta, navor?
 Pithcing, rolling, magnus effect?
-
-Koeficiente (C-je) iz terminal hitrosti?
-wiki koeficienti
-Cut off
-Gravity disk
 razlika, ce je precesija, ce je ni
+
 Errors: določtev theta
 veter
 
-https://www.researchgate.net/figure/Lift-coefficient-in-the-symmetrical-NACA-airfoils-with-thickness-varying-from-6-to-21_fig5_323253844
-Preveč upora v x smeri. Kot pri snemanju: vpilv.
-Odreži prvi del meta ko se vrti.
-Začetna hitrost povprečje prvih treh.
-Fit samo v začetnem delu: bounce
-Fit vse in povrpečje ali vse na enrkat?
-theta se spreminja: fit povprečje
-
 Naredi:
-    theta v funkiocnal?
     paralaksa 1. video (zabeleži kako)
-    1. video theta v funkiocnal
-    za strmo probaj clanek koeficiente (skiprows)
     plot t(x)
     označi začetne hitrosti in kote
+    ali plotam equal axis
+    kako minimizacija
+    poglej kodo ce je treba kej opisat

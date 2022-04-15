@@ -69,6 +69,7 @@ def plot_C_koef(axes, C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     axes.plot(x * 180 / np.pi, z, label='$C_D$')
     axes.set_xlabel('angle of attack [$^\circ$]')
     axes.legend()
+    axes.grid(linestyle='--')
     axes.set_title('C koeficienta')
 
 def funkcional(x, theta, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, weighted):
@@ -101,7 +102,7 @@ m = 0.175
 A = 0.0616
 ro = 1.23
 K = A * ro / (2 * m)
-stall_angle = np.pi / 180 * 15
+stall_angle = np.pi / 180 * 25
 C_90 = 1.1
 
 ## Podatki ##     paralksa ni vpostevana pri hitrostih, za zacetne pogoje nima veliko vpliva
@@ -138,6 +139,16 @@ t_eks_pocasi -= t_eks_pocasi[0]
 x_eks_pocasi -= x_eks_pocasi[0]
 y_eks_pocasi -= y_eks_pocasi[0]
 initial_eks_pocasi = x_eks_pocasi[0], y_eks_pocasi[0], np.average(vx_eks_pocasi[0:3]), np.average(vy_eks_pocasi[0:3])
+
+# video_pocasi
+theta_zelodesno = np.pi / 180 * 18
+t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, vx_eks_zelodesno, vy_eks_zelodesno = np.loadtxt('video_analiza_zelodesno.dat', skiprows=0, unpack=True, max_rows=None)
+t_eks_zelodesno -= t_eks_zelodesno[0]
+x_eks_zelodesno -= x_eks_zelodesno[0]
+y_eks_zelodesno -= y_eks_zelodesno[0]
+faktor_paralakse_zelodesno = 37 / 28
+x_eks_zelodesno = paralaksa_lin(faktor_paralakse_zelodesno, x_eks_zelodesno)
+initial_eks_zelodesno = x_eks_zelodesno[0], y_eks_zelodesno[0], np.average(vx_eks_zelodesno[0:3]), np.average(vy_eks_zelodesno[0:3])
 #################
 
 
@@ -373,9 +384,57 @@ initial_eks_pocasi = x_eks_pocasi[0], y_eks_pocasi[0], np.average(vx_eks_pocasi[
 # # konec vse
 # ##### konec video_2
 
+# ###### video_zelodesno
+
+# ## vse
+# fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(nrows=2, ncols=2, figsize = (8, 6))
+# # ax2.plot(N_sistem[:, 0], N_sistem[:, 1], label='(x, y), simulacija, N sistem')
+# # EKSPERIMENT #
+# ax2.plot(x_eks_zelodesno, y_eks_zelodesno, '.', label='(x, y), eksperiment')
+# ax3.plot(t_eks_zelodesno, x_eks_zelodesno, label='$x$')
+# ax3.plot(t_eks_zelodesno, y_eks_zelodesno, label='$y$')
+# ax3.plot(t_eks_zelodesno, vx_eks_zelodesno, label='$v_x$')
+# ax3.plot(t_eks_zelodesno, vy_eks_zelodesno, label='$v_y$')
+# ax3.grid(linestyle='--')
+# ax3.legend(fancybox=False, prop={'size':9})
+# ax3.set_title('Eksperiment')
+
+# # mthd_zelodesno='Nelder-Mead'
+# mthd_zelodesno='TNC'
+# # mthd_zelodesno='L-BFGS-B'
+# # mthd_zelodesno='SLSQP'
+# # bnds3 = ((0.10, 0.22), (1.9, 2.7), (0.10, 0.19), (1.00, 1.40))
+# # bnds3 = ((0.01, 1.), (0.01, 10.), (0.01, 10.), (0.01, 10.))
+# # bnds_zelodesno = ((0.01, None), (0.01, None), (0.01, None), (0.01, None)) # zakaj ce ne omejim dela bolje
+# bnds_zelodesno = None
+# C_zelodesno = minimize(funkcional, (0.188, 2.37, 0.15, 1.24), \
+#      args=(theta_zelodesno, t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, K, g, initial_eks_zelodesno, C_90, stall_angle, False), \
+#      method=mthd_zelodesno, bounds = bnds_zelodesno, tol=1e-3)
+# C_Lzelodesno = C_L_cutoff(C_zelodesno.x[0], C_zelodesno.x[1], stall_angle)  # 
+# C_D3_zelodesno = C_D_cutoff(C_zelodesno.x[2], C_zelodesno.x[3], C_90)
+# N_sistem_zelodesno = solution(t_eks_zelodesno, K, g, theta_zelodesno, C_Lzelodesno, C_D3_zelodesno, stall_angle, initial_eks_zelodesno)[0]
+# ax2.plot(N_sistem_zelodesno[:, 0], N_sistem_zelodesno[:, 1], '.', label='(x, y), simulacija, N sistem')
+# ax2.grid(linestyle='--')
+# ax2.legend(fancybox=False, prop={'size':9})
+# ax2.set_xlabel('x [m]')
+# ax2.set_ylabel('y [m]')
+# ax2.axis('equal')
+# ax2.set_title('Trajektorija')
+# plot_C_koef(ax4, C_zelodesno.x[0], C_zelodesno.x[1], stall_angle, C_zelodesno.x[2], C_zelodesno.x[3], C_90)
+
+# ax1.plot(t_eks_zelodesno, N_sistem_zelodesno[:, 0], label='$x$')
+# ax1.plot(t_eks_zelodesno, N_sistem_zelodesno[:, 1], label='$y$')
+# ax1.plot(t_eks_zelodesno, N_sistem_zelodesno[:, 2], label='$v_x$')
+# ax1.plot(t_eks_zelodesno, N_sistem_zelodesno[:, 3], label='$v_y$')
+# ax1.grid(linestyle='--')
+# ax1.legend(fancybox=False, prop={'size':9})
+# ax1.set_title('Simulacija')
+# fig.tight_layout()
+# ## konec zelodesno
+
 
 def funkcional_skupaj(x, lst, K, g, C_90, stall_angle, weighted):
-    C_L0, C_Lalpha, C_D0, C_Dalpha= x
+    C_L0, C_Lalpha, C_D0, C_Dalpha = x
     C_L = C_L_cutoff(C_L0, C_Lalpha, stall_angle)
     C_D = C_D_cutoff(C_D0, C_Dalpha, C_90)
     distance = 0.
@@ -404,11 +463,12 @@ bnds = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
 weighted = True
 C_fit = minimize(funkcional_skupaj, (0.188, 2.37, 0.15, 1.24), \
     args=([ (theta_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1),\
-          (theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo),\
+         (theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo),\
          (theta_2, t_eks_2, x_eks_2, y_eks_2, initial_eks_2), \
-             (theta_pocasi, t_eks_pocasi, x_eks_pocasi, y_eks_pocasi, initial_eks_pocasi)], \
+         (theta_pocasi, t_eks_pocasi, x_eks_pocasi, y_eks_pocasi, initial_eks_pocasi), \
+         (theta_zelodesno, t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, initial_eks_zelodesno)], \
          K, g, C_90, stall_angle, weighted), \
-         method=mthd, bounds = bnds, tol=1e-3)
+        method=mthd, bounds = bnds, tol=1e-3)
 C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)  # 
 C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
 plot_C_koef(ax2, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
@@ -417,6 +477,7 @@ N_sistem_1 = solution(t_eks_1, K, g, theta_1, C_L, C_D, stall_angle, initial_eks
 N_sistem_strmo = solution(t_eks_strmo, K, g, theta_strmo, C_L, C_D, stall_angle, initial_eks_strmo)[0]
 N_sistem_2 = solution(t_eks_2, K, g, theta_2, C_L, C_D, stall_angle, initial_eks_2)[0]
 N_sistem_pocasi = solution(t_eks_pocasi, K, g, theta_pocasi, C_L, C_D, stall_angle, initial_eks_pocasi)[0]
+N_sistem_zelodesno = solution(t_eks_zelodesno, K, g, theta_zelodesno, C_L, C_D, stall_angle, initial_eks_zelodesno)[0]
 
 ax3.plot(N_sistem_1[:, 0], N_sistem_1[:, 1], '.', label='video_1 simulacija')
 ax3.plot(x_eks_1, y_eks_1, '.', label='video_1, eksperiment')
@@ -450,6 +511,14 @@ ax6.set_xlabel('x [m]')
 ax6.set_ylabel('y [m]')
 ax6.axis('equal')
 ax6.set_title('Minimization method={}, w={} \n {}'.format(mthd, weighted, C_fit.x))
+ax7.plot(N_sistem_zelodesno[:, 0], N_sistem_zelodesno[:, 1], '.', label='video_zelodesno simulacija')
+ax7.plot(x_eks_zelodesno, y_eks_zelodesno, '.', label='video_zelodesno, eksperiment')
+ax7.grid(linestyle='--')
+ax7.legend(fancybox=False, prop={'size':8})
+ax7.set_xlabel('x [m]')
+ax7.set_ylabel('y [m]')
+ax7.axis('equal')
+ax7.set_title('Minimization method={}, w={} \n {}'.format(mthd, weighted, C_fit.x))
 
 fig.tight_layout()
 
