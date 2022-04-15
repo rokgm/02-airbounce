@@ -11,10 +11,8 @@ Errors: določtev theta
 veter
 
 Naredi:
-    paralaksa 1. video (zabeleži kako)
     plot t(x)
     označi začetne hitrosti in kote
-    ali plotam equal axis
     kako minimizacija
     poglej kodo ce je treba kej opisats
     viri,
