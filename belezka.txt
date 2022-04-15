@@ -16,4 +16,6 @@ Naredi:
     označi začetne hitrosti in kote
     ali plotam equal axis
     kako minimizacija
-    poglej kodo ce je treba kej opisat
+    poglej kodo ce je treba kej opisats
+    viri,
+    error bar
