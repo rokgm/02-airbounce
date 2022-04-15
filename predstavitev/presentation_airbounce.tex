@@ -51,10 +51,6 @@
 %\usetheme{Szeged}
 \usetheme{Warsaw}
 
-% As well as themes, the Beamer class has a number of color themes
-% for any slide theme. Uncomment each of these in turn to see how it
-% changes the colors of your current slide theme.
-
 %\usecolortheme{albatross}
 %\usecolortheme{beaver}
 %\usecolortheme{beetle}
@@ -69,11 +65,20 @@
 \usecolortheme{seahorse}
 %\usecolortheme{whale}
 %\usecolortheme{wolverine}
+
 \usefonttheme{professionalfonts} 
 \setbeamertemplate{caption}[numbered]
+%\usetheme{}
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
 
 \usepackage[utf8]{inputenc}
-\usepackage[slovene]{babel}
+\usepackage[english]{babel}
 \usepackage{physics}
 \usepackage{amsmath}
 \usepackage{bm}
@@ -131,102 +136,189 @@ Presenter: Rok Grgič Meško}
 
 \begin{frame}
 
-\frametitle{Official problem
-statement}
+\begin{block}{Official problem statement}
 When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. Study the physics of this phenomenon.
+\end{block}
+\includegraphics[width=\textwidth]{primer_meta.png}
 
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Stabilen frizbi}
+
+\frametitle{Ideas and hypotheses}
+
 \begin{itemize}
-\item Frizbi zaradi vrtenja ohranja orientacijo.
+\item Normal component of Frisbee velocity will decrease faster because of its shape.
+
+\item Frisbee will appear to bounce in mid-air.
 \end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Theoretical description}
+
+\begin{itemize}
+\item Frisbee in the original video is stable. Angle to the ground is constant.
+
+\item Assumption: \\
+Frisbee keeps constant angle to the ground during the whole flight because of gyroscopic stability.
+\end{itemize}
+
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Theoretical description}
+
+\begin{Large}
+Axis graphs:
+\end{Large}
 
 \begin{figure}[H]
 	\centering
 	\begin{minipage}{.5\textwidth}
 	  \centering
-	  \includegraphics[width=6cm]{graf_osi.png}
-	  \captionof{figure}{Graf osi, koordinatni sistem N}
+	  \includegraphics[width=\textwidth]{graf_osi.png}
+	  \captionof{figure}{\\ Ground coordinate system: N}
 	\end{minipage}%
 	\begin{minipage}{.5\textwidth}
 	  \centering
-	  \includegraphics[width=6cm]{osi_frisbeeja.png}
-	  \captionof{figure}{Koordinatni sistem frizbija D}
+	  \includegraphics[width=\textwidth]{osi_frisbeeja.png}
+	  \captionof{figure}{\\ Coordinate system of Frisbee: D}
 	\end{minipage}
 \end{figure}
 
+$ \theta = $ angle to the ground \qquad \qquad $ \alpha = $ angle of attack
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-V sistemu frizbija (D):
-\begin{gather}
-L = \dfrac{1}{2} A \rho C_L v^2 \qquad D = \dfrac{1}{2} A \rho C_D v^2\\
-C_L = C_{L0} + C_{L \alpha} \alpha \qquad C_D = C_{D0} + C_{D \alpha} \alpha^2\\
+
+\frametitle{Theoretical description}
+
+\begin{block}{Lift and drag force}
+\begin{equation}
+L = \dfrac{1}{2} A \rho C_L v^2 \qquad D = \dfrac{1}{2} A \rho C_D v^2
+\end{equation}
+\end{block}
+
+\begin{block}{Lift and drag coefficient depending on angle of attack \cite{clanek}}
+\begin{equation}
+C_L = C_{L0} + C_{L \alpha} \alpha \qquad C_D = C_{D0} + C_{D \alpha} \alpha^2
+\end{equation}
+\end{block}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Theoretical description}
+
+\begin{block}{Cutoff}
+\begin{itemize}
+\item $C_D$ cutoff; when $C_D = 1.1$ (drag coefficient of a disc perpendicular to velocity)
+
+\item $C_L$ cutoff; at stall angle = $25^{\circ}$
+\end{itemize}
+\end{block}
+
+\begin{figure}[H]
+	\centering	  \includegraphics[width=0.6\textwidth]{lift_drag_primer.png}
+	  \caption{$C_{L0} = 0.188, C_{L \alpha}= 2.37, C_{D0} = 0.15, C_{D \alpha} = 1.24$ \cite{clanek}}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Theoretical description: Forces}
+
+\begin{columns}[onlytextwidth]
+
+\column{0.5 \textwidth}
+
+\vspace{-10mm}
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width=\textwidth]{osi_frisbeeja.png}
+	  \caption{Coordinate system of Frisbee: D}
+\end{figure}
+
+\vspace{-10mm}
+\begin{gather*}
 K = \dfrac{A \rho}{2 m} \qquad \tan \alpha = \dfrac{-v_2}{v_1}\\
-\bm L = m K v^2 C_L \mqty(\sin \alpha \\ \cos \alpha) = m K v^2 C_L \mqty(-v_2 \\ v_1\\)\\
-\bm D = m K v^2 C_D \mqty(-\cos \alpha \\ \sin \alpha) = m K v^2 C_D \mqty(-v_1 \\ -v_2\\)\\
-\bm F_{\bm g} = - m g  \mqty(\sin \theta \\ \cos \theta)
+v = \sqrt{v_1^2 + v_2^2}
+\end{gather*}
+
+\column{0.5 \textwidth}
+
+\vspace{-10mm}
+
+\begin{gather}
+\begin{split}
+\bm L = m K C_L v^2 \mqty(\sin \alpha \\ \cos \alpha)_D\\
+\bm L = m K  C_L v \mqty(-v_2 \\ v_1\\)_D
+\end{split}
 \end{gather}
+
+\begin{gather}
+\begin{split}
+\bm D = m K C_D v^2 \mqty(-\cos \alpha \\ \sin \alpha)_D\\
+\bm D = m K C_D v \mqty(-v_1 \\ -v_2\\)_D
+\end{split}
+\end{gather}
+
+\begin{gather}
+\begin{split}
+\bm F_{\bm g} = - m g  \mqty(\sin \theta \\ \cos \theta)_D
+\end{split}
+\end{gather}
+
+\end{columns}
+
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
+
+\frametitle{Theoretical description}
+
 \begin{gather}
 m \bm a = \bm L + \bm D + \bm F_{\bm g}\\
-v = \sqrt{v_1^2 + v_2^2}\\
-a_1 = -K (C_{L0} + C_{L \alpha} \alpha) v v_2 - K (C_{D0} + C_{D \alpha} \alpha^2) v v_1 - g \sin \theta\\
-a_2 = K (C_{L0} + C_{L \alpha} \alpha) v v_1 - K (C_{D0} + C_{D \alpha} \alpha^2) v v_2 - g \cos\theta
+\mqty( \dot{v_1} \\ \dot{v_2}\\)_D = K  C_L v \mqty(-v_2 \\ v_1\\)_D + K C_D v \mqty(-v_1 \\ -v_2\\)_D - g  \mqty(\sin \theta \\ \cos \theta)_D\\
+%a_1 = -K (C_{L0} + C_{L \alpha} \alpha) v v_2 - K (C_{D0} + C_{D \alpha} \alpha^2) v v_1 - g \sin \theta\\
+%a_2 = K (C_{L0} + C_{L \alpha} \alpha) v v_1 - K (C_{D0} + C_{D \alpha} \alpha^2) v v_2 - g \cos\theta
+\mqty( \dot{d_1} \\ \dot{d_2}\\)_D = \mqty( v_1 \\v_2\\)_D
 \end{gather}
-Rešimo: \(d_1, d_2, v_1, v_2 \).\\
-Zarotiramo v N sistem.
+Solve for: $d_1, d_2, v_1, v_2 $ and rotate to ground coordinate system N.
 \begin{gather}
 R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
-\mqty(x \\ y)_N = R \mqty(d_1 \\ d_2)_D\\
-\mqty(v_x \\ v_y)_N = R \mqty(v_1 \\ v_2)_D
+\mqty(x \\ y)_N = R \mqty(d_1 \\ d_2)_D \qquad \mqty(v_x \\ v_y)_N = R \mqty(v_1 \\ v_2)_D
 \end{gather}
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Koeficienti lift-a in drag-a.}
-\[C_L = C_{L0} + C_{L \alpha} \alpha \qquad C_D = C_{D0} + C_{D \alpha} \alpha^2\]\\
-\begin{itemize}
 
-\item Za koeficient drag-a $C_D$ cutoff, ko doseže $C_D$ vrednost diska, ki je pravokoten na hitrost.
+\frametitle{Experiment}
 
-\item Za koeficient lift-a $C_L$, cutoff pri stall angle.
-\end{itemize}
-\begin{figure}[H]
-	\centering
-	  \includegraphics[width=5cm]{koeficienta_cutoff.png}
-	  \caption{Cutoff koeficientov}
-\end{figure}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Met: različni začetnimi koti.}
-
-\begin{figure}[H]
-	\centering
-	  \includegraphics[width=9cm]{med_razlicni_koti.png}
-	  \caption{Začetna hitrost = (15, -8) m/s. Začetni kot v stopinjah.}
-\end{figure}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Problemi}
 \begin{itemize}
 \item Pri mojem metu ni stabilen.
 \item Wobbling frisbee.
@@ -234,12 +326,20 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 \end{frame}
 
 %------------------------------------------------
+
 \begin{frame}
-\frametitle{Plan za naprej}
-\begin{itemize}
-\item Naučim se boljši met, da ni treba simulirati wobble-a.
-\item Če se ujema s simulacijo: v brezdimenzijsko, fazni diagram kdaj se pojavi je airbounce...
-\end{itemize}
+
+\frametitle{References}
+
+\setbeamertemplate{bibliography item}[text]
+
+\begin{thebibliography}{9}
+
+\bibitem{clanek}
+M. Hubbard, S. A. Hummel. \textit{Simulation of Frisbee Flight}. (2000). \url{https://www.researchgate.net/publication/253842372_Simulation_of_Frisbee_Flight}
+
+\end{thebibliography}
+
 \end{frame}
 
 %------------------------------------------------
