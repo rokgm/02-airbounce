@@ -103,8 +103,7 @@
 
 \title[2. Airbounce]{Problem no.2 - Airbounce}
 \subtitle{IPT 2022}
-\author[University of Ljubljana]{Team Slovenia\\
-Presenter: Rok Grgič Meško}
+\author[University of Ljubljana]{Team Slovenia \\ Presenter: Rok Grgi\v c Me\v sko}
 \date{\vspace{-5ex}}
 
 \begin{document}
@@ -147,13 +146,13 @@ When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. S
 
 \begin{frame}
 
-\frametitle{Ideas and hypotheses}
-
+\begin{block}{Ideas and hypotheses}
 \begin{itemize}
 \item Normal component of Frisbee velocity will decrease faster because of its shape.
 
 \item Frisbee will appear to bounce in mid-air.
 \end{itemize}
+\end{block}
 
 \end{frame}
 
@@ -163,13 +162,19 @@ When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. S
 
 \frametitle{Theoretical description}
 
+\begin{block}{}
 \begin{itemize}
 \item Frisbee in the original video is stable. Angle to the ground is constant.
 
-\item Assumption: \\
-Frisbee keeps constant angle to the ground during the whole flight because of gyroscopic stability.
-\end{itemize}
+\item Assumptions:
 
+\begin{itemize}
+\item Frisbee keeps constant angle to the ground during the whole flight because of gyroscopic stability.
+
+\item Frisbee travels in a straight line. (no Magnus effect...)
+\end{itemize}
+\end{itemize}
+\end{block}
 
 \end{frame}
 
@@ -320,9 +325,36 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 \frametitle{Experiment}
 
 \begin{itemize}
-\item Pri mojem metu ni stabilen.
-\item Wobbling frisbee.
+\item Video analysis of a throw.
+\item Problems:
+\begin{itemize}
+\item Frisbee is not stable as in the original video.
+\item ?Parallax? error. Throw is not perpendicular to the camera.
 \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width=\textwidth]{primer_meta.png}
+	  \caption{Example of a throw.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Parallax error correction}
+
+\(dx\) is measured, \(dx'\) is correct
+
+\begin{gather}
+k = \dfrac{\mathrm{final \; frisbee \; size}}{\mathrm{initial \;  frisbee  \; size}} \qquad l = \mathrm{lenght \; of \; a \; throw}\\
+dx =  \mu(x) dx' = \left( \dfrac{k - 1}{l} x + 1 \right) dx' \\
+x = \int_{0}^{x} \mu(x) \,dx = \dfrac{l}{k - 1} \left[ \ln((k - 1) x + l) - \ln l \right]
+\end{gather}
+
 \end{frame}
 
 %------------------------------------------------
