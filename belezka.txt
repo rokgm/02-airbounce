@@ -12,7 +12,6 @@ veter
 
 Naredi:
     plot t(x)
-    označi začetne hitrosti in kote
     kako minimizacija
     poglej kodo ce je treba kej opisats
     viri,
