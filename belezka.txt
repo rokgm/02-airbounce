@@ -16,3 +16,12 @@ Naredi:
     poglej kodo ce je treba kej opisats
     viri,
     error bar
+    argumentacija a-ja pri utežeh, vrednost
+    enega izloči iz fitanja
+    precesija
+    kako je article dobil parametre
+    theta v fit
+    skala videoanalasyiy pixel v metre
+    konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
+    rotacija ni upoštevana
+    izboljsva meritev vetra, v hali noter
