@@ -20,8 +20,10 @@ Naredi:
     enega izloči iz fitanja
     precesija
     kako je article dobil parametre
-    theta v fit
+    theta v fit, efektivni theta, povprečni
     skala videoanalasyiy pixel v metre
     konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
     rotacija ni upoštevana
     izboljsva meritev vetra, v hali noter
+    preveri, če gre ta slab ven
+    share template
