@@ -333,6 +333,17 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 \end{itemize}
 \end{itemize}
 
+\begin{table}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+$m [\mathrm{kg}]$ & $A [\mathrm{m^2}]$ & $\rho [\mathrm{kg/m^3}]$ &  $g [\mathrm{m / s^2}]$ \\ 
+\hline 
+$0.175$ & $0.0616$ & $1.23$ & $9.8$ \\ 
+\hline 
+\end{tabular}
+\caption{Frisbee parameters and constants.}
+\end{table} 
+
 \begin{figure}[H]
 	\centering
 	  \includegraphics[width=\textwidth]{primer_meta.png}
@@ -351,10 +362,91 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 
 \begin{gather}
 k = \dfrac{\mathrm{final \; frisbee \; size}}{\mathrm{initial \;  frisbee  \; size}} \qquad l = \mathrm{lenght \; of \; a \; throw}\\
-dx =  \mu(x) dx' = \left( \dfrac{k - 1}{l} x + 1 \right) dx' \\
-x = \int_{0}^{x} \mu(x) \,dx = \dfrac{l}{k - 1} \left[ \ln((k - 1) x + l) - \ln l \right]
+dx = \left( \dfrac{k - 1}{l} x + 1 \right) dx' \\
+x = \int_{0}^{x} \left( \dfrac{k - 1}{l} x + 1 \right)^{-1} \,dx \\
+x = \dfrac{l}{k - 1} \left[ \ln((k - 1) x + l) - \ln l \right]
 \end{gather}
 
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Results}
+
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width=0.85 \textwidth]{strmo_clanek_vse.png}
+	  \captionsetup{justification=centering,margin=0cm}
+	  \caption{$\theta = 19 ^{\circ}$, $v_x(t = 0) = 10.63 \mathrm{\frac{m}{s}}$, $v_y(t = 0) = -1.21 \mathrm{\frac{m}{s}}$ \\
+	  $C_L, C_D$: article \cite{clanek}}
+\end{figure}
+
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Fitting $C_L$ and $C_D$ over all experiments}
+
+\begin{block}{Minimization of $s$ over $k$ experiments:}
+\begin{gather}
+s_k = \sum_{i} w_i \, \| (x_i, y_i)_{sim} - (x_i, y_i)_{exp} \|^2 \\
+w_i = e^{-a \, t_i}\\
+s = \sum_k s_k
+\end{gather}
+
+\begin{center}
+\texttt{scipy.optimize.minimize(method='TNC')}
+\end{center}
+\end{block}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Fitting $C_L$ and $C_D$ over all experiments}
+
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width=0.6 \textwidth]{mini_clanek_cji.png}
+	  \captionsetup{justification=centering,margin=0cm}
+	  \caption{$C_{L0} = 0.188, C_{L \alpha}= 2.37, C_{D0} = 0.15, C_{D \alpha} = 1.24$ \cite{clanek} \\
+	  $C_{L0} = 0.157, C_{L \alpha}= 2.33, C_{D0} = 0.22, C_{D \alpha} = 1.07$ [minimization]}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+%\frametitle{Fitting $C_L$ and $C_D$ over all experiments}
+
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width= \textwidth]{trajectories_mini.png}
+	  \captionsetup{justification=centering,margin=0cm}
+	  \caption{All experiments minimization.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Conclusion}
+error propagation, veter...\\
+brezdimenzijska?\\
+Preveri čas iznihanja frisbeeja, če se ga upogne?\\
+fazni diagram, magnituda-urkivljenost, razdalje kje je bounce\\
+lift to drag ratio\\
+stall angle utemeljitev z reynoldsovim stevilom\\
 \end{frame}
 
 %------------------------------------------------
