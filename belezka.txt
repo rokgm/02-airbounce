@@ -21,6 +21,7 @@ Naredi:
     precesija
     kako je article dobil parametre
     theta v fit, efektivni theta, povprečni
+    unweighted dodaj
     skala videoanalasyiy pixel v metre
     konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
     rotacija ni upoštevana
