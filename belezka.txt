@@ -28,3 +28,4 @@ Naredi:
     izboljsva meritev vetra, v hali noter
     preveri, če gre ta slab ven
     share template
+    skrajsaj
