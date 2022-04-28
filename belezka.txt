@@ -24,7 +24,10 @@ Naredi:
     unweighted dodaj
     skala videoanalasyiy pixel v metre
     konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
-    rotacija ni upoštevana
+    rotacija ni upoštevana, oznake na frizbiju
     izboljsva meritev vetra, v hali noter
     preveri, če gre ta slab ven
     share template
+
+david:
+    indukcija
