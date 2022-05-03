@@ -135,7 +135,7 @@
 
 \begin{frame}
 
-\begin{block}{Official problem statement}
+\begin{block}{Official Problem Statement}
 When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. Study the physics of this phenomenon.
 \end{block}
 \includegraphics[width=\textwidth]{primer_meta.png}
@@ -146,7 +146,7 @@ When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. S
 
 \begin{frame}
 
-\begin{block}{Ideas and hypotheses}
+\begin{block}{Ideas and Hypotheses}
 \begin{itemize}
 \item Normal component of Frisbee velocity will decrease faster because of its shape.
 
@@ -160,7 +160,7 @@ When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. S
 
 \begin{frame}
 
-\frametitle{Theoretical description}
+\frametitle{Theoretical Description}
 
 \begin{block}{}
 \begin{itemize}
@@ -182,7 +182,7 @@ When a Frisbee is thrown in a certain way it can be made to bounce in mid-air. S
 
 \begin{frame}
 
-\frametitle{Theoretical description}
+\frametitle{Theoretical Description}
 
 \begin{Large}
 Axis graphs:
@@ -210,7 +210,7 @@ $ \theta = $ angle to the ground \qquad \qquad $ \alpha = $ angle of attack
 
 \begin{frame}
 
-\frametitle{Theoretical description}
+\frametitle{Theoretical Description}
 
 \begin{block}{Lift and drag force}
 \begin{equation}
@@ -230,7 +230,7 @@ C_L = C_{L0} + C_{L \alpha} \alpha \qquad C_D = C_{D0} + C_{D \alpha} \alpha^2
 
 \begin{frame}
 
-\frametitle{Theoretical description}
+\frametitle{Theoretical Description}
 
 \begin{block}{Cutoff}
 \begin{itemize}
@@ -241,8 +241,8 @@ C_L = C_{L0} + C_{L \alpha} \alpha \qquad C_D = C_{D0} + C_{D \alpha} \alpha^2
 \end{block}
 
 \begin{figure}[H]
-	\centering	  \includegraphics[width=0.6\textwidth]{lift_drag_primer.png}
-	  \caption{$C_{L0} = 0.188, C_{L \alpha}= 2.37, C_{D0} = 0.15, C_{D \alpha} = 1.24$ \cite{clanek}}
+	\centering	  \includegraphics[width=0.5\textwidth]{lift_drag_primer.png}
+	  \caption{$C_{L0} = 0.188, C_{L \alpha}= 2.37, C_{D0} = 0.15, C_{D \alpha} = 1.24$  \\	M. Hubbard, S. A. Hummel. \textit{Simulation of Frisbee Flight}. (2000). \cite{clanek}  (short flights)}
 \end{figure}
 
 \end{frame}
@@ -251,7 +251,7 @@ C_L = C_{L0} + C_{L \alpha} \alpha \qquad C_D = C_{D0} + C_{D \alpha} \alpha^2
 
 \begin{frame}
 
-\frametitle{Theoretical description: Forces}
+\frametitle{Theoretical Description: Forces}
 
 \begin{columns}[onlytextwidth]
 
@@ -302,7 +302,7 @@ v = \sqrt{v_1^2 + v_2^2}
 
 \begin{frame}
 
-\frametitle{Theoretical description}
+\frametitle{Theoretical Description}
 
 \begin{gather}
 m \bm a = \bm L + \bm D + \bm F_{\bm g}\\
@@ -326,12 +326,25 @@ R = \mqty(\cos \theta & -\sin \theta \\ \sin \theta & \cos \theta)\\
 
 \begin{itemize}
 \item Video analysis of a throw.
+\item Analysed only stable throws.
 \item Problems:
+
 \begin{itemize}
 \item Frisbee is not stable as in the original video.
-\item ?Parallax? error. Throw is not perpendicular to the camera.
+\item Parallax error. Throw is not perpendicular to the camera.
+\item Wind speed was not measured.
+\item Rotation of Frisbee not measured, coefficients of lift and drag for rotating Frisbee.
 \end{itemize}
+
 \end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Experiment}
 
 \begin{table}
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -356,7 +369,7 @@ $0.175$ & $0.0616$ & $1.23$ & $9.8$ \\
 
 \begin{frame}
 
-\frametitle{Parallax error correction}
+\frametitle{Parallax Error Correction}
 
 \(dx\) is measured, \(dx'\) is correct
 
@@ -373,13 +386,13 @@ x' = \dfrac{l}{k - 1} \left[ \ln((k - 1) x + l) - \ln l \right]
 
 \begin{frame}
 
-\frametitle{Results}
+\frametitle{Results, example of a throw:}
 
 \begin{figure}[H]
 	\centering
-	  \includegraphics[width=0.85 \textwidth]{strmo_clanek_vse.png}
+	  \includegraphics[width=0.85 \textwidth]{strmo_clanek_vse.pdf}
 	  \captionsetup{justification=centering,margin=0cm}
-	  \caption{$\theta = 19 ^{\circ}$, $v_x(t = 0) = 10.63 \mathrm{\frac{m}{s}}$, $v_y(t = 0) = -1.21 \mathrm{\frac{m}{s}}$ \\
+	  \caption{$\theta = 19 ^{\circ}$, $v_x(t = 0) = 10.64 \mathrm{\frac{m}{s}}$, $v_y(t = 0) = -1.21 \mathrm{\frac{m}{s}}$ \\
 	  $C_L, C_D$: article \cite{clanek}}
 \end{figure}
 
@@ -390,13 +403,17 @@ x' = \dfrac{l}{k - 1} \left[ \ln((k - 1) x + l) - \ln l \right]
 
 \begin{frame}
 
-\frametitle{Fitting $C_L$ and $C_D$ over all experiments}
+\frametitle{Fitting $C_L$ and $C_D$}
+
+Angle to the ground ($\theta$) in not constant, we used effective (average) angle $\theta_{ef}$.\\
+Parameters in finding $C_L$ and $C_D$:\\
+ \quad	$\theta_{ef}$, $C_{L0}$, $C_{L \alpha}$, $C_{D0}$, $C_{D \alpha}$
 
 \begin{block}{Minimization of $s$ over $k$ experiments:}
 \begin{gather}
 s_k = \sum_{i} w_i \, \| (x_i, y_i)_{sim} - (x_i, y_i)_{exp} \|^2 \\
-w_i = e^{-a \, t_i}\\
-s = \sum_k s_k
+s = \sum_k s_k\\
+w_i = \dfrac{1}{\Delta x_i^2}
 \end{gather}
 
 \begin{center}
@@ -410,14 +427,31 @@ s = \sum_k s_k
 
 \begin{frame}
 
-\frametitle{Fitting $C_L$ and $C_D$ over all experiments}
+\frametitle{Fitting $C_L$ and $C_D$}
+
+\begin{block}{Weights}
+\begin{gather}
+x_i = \int_{0}^{t_i} \left( \int_{0}^{t_i} a \, dt \right) \,dt \\
+\Delta x_i = \pdv{x_i}{a} \Delta a + \Delta x_0\\
+w_i = \left( \dfrac{\Delta a}{2} \, t_i^2 + \Delta x_0 \right)^{-2}
+\end{gather}
+\end{block}
+
+\[ \Delta a \approx 0.1 \mathrm{\dfrac{m}{s^2}} \qquad \Delta x_0 \approx 1 \mathrm{cm} \]
+
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Fitting $C_L$ and $C_D$}
 
 \begin{figure}[H]
 	\centering
-	  \includegraphics[width=0.6 \textwidth]{mini_clanek_cji.png}
+	  \includegraphics[width=0.6 \textwidth]{cji_clanek_weighted.pdf}
 	  \captionsetup{justification=centering,margin=0cm}
 	  \caption{$C_{L0} = 0.188, C_{L \alpha}= 2.37, C_{D0} = 0.15, C_{D \alpha} = 1.24$ \cite{clanek} \\
-	  $C_{L0} = 0.157, C_{L \alpha}= 2.33, C_{D0} = 0.22, C_{D \alpha} = 1.07$ [minimization]}
+	  $C_{L0} = 0.138, C_{L \alpha}= 2.20, C_{D0} = 0.171, C_{D \alpha} = 1.47$ [minimization]}
 \end{figure}
 
 \end{frame}
@@ -425,13 +459,39 @@ s = \sum_k s_k
 %------------------------------------------------
 \begin{frame}
 
-%\frametitle{Fitting $C_L$ and $C_D$ over all experiments}
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width= \textwidth]{traj_weighted_mini.pdf}
+	  \captionsetup{justification=centering,margin=0cm}
+	  \caption{All experiments.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+
+\frametitle{Minimization: Weighted vs Unweighted }
 
 \begin{figure}[H]
 	\centering
-	  \includegraphics[width= \textwidth]{trajectories_mini.png}
+	  \includegraphics[width=0.6 \textwidth]{cji_weighted_unweighted.pdf}
 	  \captionsetup{justification=centering,margin=0cm}
-	  \caption{All experiments minimization.}
+	  \caption{$C_{L0} = 0.138, C_{L \alpha}= 2.20, C_{D0} = 0.171, C_{D \alpha} = 1.47 \,$(weighted) \\
+	  $C_{L0} = 0.127, C_{L \alpha}= 2.23, C_{D0} = 0.258, C_{D \alpha} = 0.585 \,$(unweighted) }
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{figure}[H]
+	\centering
+	  \includegraphics[width= \textwidth]{traj_unweighted_weighted.pdf}
+	  \captionsetup{justification=centering,margin=0cm}
+	  \caption{All experiments.}
 \end{figure}
 
 \end{frame}
@@ -441,12 +501,21 @@ s = \sum_k s_k
 \begin{frame}
 
 \frametitle{Conclusion}
-error propagation, veter...\\
-brezdimenzijska?\\
-Preveri čas iznihanja frisbeeja, če se ga upogne?\\
-fazni diagram, magnituda-urkivljenost, razdalje kje je bounce\\
-lift to drag ratio\\
-stall angle utemeljitev z reynoldsovim stevilom\\
+
+\begin{itemize}
+\item Simulation and experiment match.
+\item Coefficients similar as article: good model
+\item Experiment improvements:
+
+\begin{itemize}
+\item measure wind speed 
+\item practice more for a stable throw
+\item experiment conducted inside
+\item measure Frisbee rotation
+\end{itemize}
+
+\end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
@@ -461,6 +530,9 @@ stall angle utemeljitev z reynoldsovim stevilom\\
 
 \bibitem{clanek}
 M. Hubbard, S. A. Hummel. \textit{Simulation of Frisbee Flight}. (2000). \url{https://www.researchgate.net/publication/253842372_Simulation_of_Frisbee_Flight}
+
+\bibitem{clanekPC}
+J. Potts, W. J. Crowther. \textit{Disc-wing Aerodynamics}. (2002). \url{https://www.researchgate.net/publication/268559957_FrisbeeTM_Aerodynamics}
 
 \end{thebibliography}
 

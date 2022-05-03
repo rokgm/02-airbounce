@@ -1,34 +1,14 @@
 Preveri čas iznihanja frisbeeja, če se ga upogne?
 Vrtinci
-fazni diagram, magnituda-urkivljenost, razdalje kje je bounce
-lift to drag ratio
-stall angle utemeljitev z reynoldsovim stevilom
-
-Pithcing, rolling, magnus effect?
-razlika, ce je precesija, ce je ni
-
-Errors: določtev theta
-veter
 
 Naredi:
-    plot t(x)
-    kako minimizacija
-    poglej kodo ce je treba kej opisats
-    viri,
     error bar
-    argumentacija a-ja pri utežeh, vrednost
-    enega izloči iz fitanja
-    precesija
-    kako je article dobil parametre
-    theta v fit, efektivni theta, povprečni
-    unweighted dodaj
+	fazni diagram, magnituda-urkivljenost, razdalje kje je bounce
     skala videoanalasyiy pixel v metre
     konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
-    rotacija ni upoštevana, oznake na frizbiju
-    izboljsva meritev vetra, v hali noter
-    preveri, če gre ta slab ven
-    share template
-    skrajsaj
+    brezdimenzijska
 
 david:
     indukcija
+https://en.wikipedia.org/wiki/Poincar%C3%A9_map
+

@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
@@ -67,10 +68,10 @@ def plot_C_koef(axes, C_L0, C_Lalpha, stall_angle, C_D0, C_Dalpha, C_90):
     axes.plot(x * 180 / np.pi, y, label='$C_L$')
     z = [C_D_cutoff(C_D0, C_Dalpha, C_90)(x) for x in x]
     axes.plot(x * 180 / np.pi, z, label='$C_D$')
-    axes.set_xlabel('angle of attack [$^\circ$]')
+    axes.set_xlabel('angle of attack [$^\circ$]', fontsize=13)
     axes.legend()
     axes.grid(linestyle='--')
-    axes.set_title('Lift and drag coefficient')
+    axes.set_title('Lift and drag coefficient', fontsize=17)
 
 def funkcional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, weighted):
     theta_ef, C_L0, C_Lalpha, C_D0, C_Dalpha= x
@@ -79,7 +80,8 @@ def funkcional(x, t_eks1, x_eks1, y_eks1, K, g, initial_eks, C_90, stall_angle, 
     N_sistem = solution(t_eks1, K, g, theta_ef, C_L, C_D, stall_angle, initial_eks)[0]
     
     if weighted:
-        weights = np.exp(-t_eks1 * 3.)
+        #weights = np.exp(-t_eks1 * 3.)
+        weights = 1 / (0.05 + t_eks1**2 + 0.01)**2
     else:
         weights = 1.
 
@@ -96,7 +98,8 @@ def funkcional_skupaj(x, lst, K, g, C_90, stall_angle, weighted):
         N_sistem = solution(t_eks, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
     
         if weighted:
-            weights = np.exp(-t_eks * 2.)
+            #weights = np.exp(-t_eks * 2.)
+            weights = 1 / (0.05 + t_eks**2 + 0.01)**2
         else:
             weights = 1.
 
@@ -168,7 +171,7 @@ x_eks_zelodesno = paralaksa_lin(faktor_paralakse_zelodesno, x_eks_zelodesno)
 initial_eks_zelodesno = x_eks_zelodesno[0], y_eks_zelodesno[0], np.average(vx_eks_zelodesno[0:3]), np.average(vy_eks_zelodesno[0:3])
 
 # video_3
-theta_3 = np.pi / 180 * 18
+theta_3 = np.pi / 180 * 10
 t_eks_3, x_eks_3, y_eks_3, vx_eks_3, vy_eks_3 = np.loadtxt('video_analiza_3.dat', skiprows=0, unpack=True, max_rows=None)
 t_eks_3 -= t_eks_3[0]
 x_eks_3 -= x_eks_3[0]
@@ -179,24 +182,27 @@ initial_eks_3 = x_eks_3[0], y_eks_3[0], np.average(vx_eks_3[0:3]), np.average(vy
 def plot_all(theta, t_eks, x_eks, y_eks, vx_eks, vy_eks, initial_eks, C, C_L, C_D):
     fig, ((ax1, ax3), (ax2, ax4)) = plt.subplots(nrows=2, ncols=2, figsize = (8, 6))
     # EKSPERIMENT #
-    ax2.plot(x_eks, y_eks, '.', label='(x, y), eksperiment')
+    ax2.plot(x_eks, y_eks, '.', label='experiment')
     ax3.plot(t_eks, x_eks, label='$x$')
     ax3.plot(t_eks, y_eks, label='$y$')
     ax3.plot(t_eks, vx_eks, label='$v_x$')
     ax3.plot(t_eks, vy_eks, label='$v_y$')
     ax3.grid(linestyle='--')
+    ax3.set_xlabel('t [s]', fontsize=13)
+    ax3.set_ylabel('[m, m/s]', fontsize=13)
     ax3.legend(fancybox=False, prop={'size':9})
-    ax3.set_title('Eksperiment')
+    ax3.set_title('Experiment', fontsize=17)
 
     N_sistem = solution(t_eks, K, g, theta, C_L, C_D, stall_angle, initial_eks)[0]
-    ax2.plot(N_sistem[:, 0], N_sistem[:, 1], '.', label='(x, y), simulacija, N sistem')
+    ax2.plot(N_sistem[:, 0], N_sistem[:, 1], '.', label='simulation')
     ax2.grid(linestyle='--')
     ax2.legend(fancybox=False, prop={'size':9})
-    ax2.set_xlabel('x [m]')
-    ax2.set_ylabel('y [m]')
-    ax2.axis('equal')
-    ax2.set_title('Trajektorija')
-    plot_C_koef(ax4, C.x[1], C.x[2], stall_angle, C.x[3], C.x[4], C_90)
+    ax2.set_xlabel('x [m]', fontsize=13)
+    ax2.set_ylabel('y [m]', fontsize=13)
+    #ax2.axis('equal')
+    ax2.set_title('Trajectory', fontsize=17)
+    #plot_C_koef(ax4, C.x[1], C.x[2], stall_angle, C.x[3], C.x[4], C_90)
+    plot_C_koef(ax4, 0.188, 2.37, stall_angle,  0.15, 1.24, C_90)
 
     ax1.plot(t_eks, N_sistem[:, 0], label='$x$')
     ax1.plot(t_eks, N_sistem[:, 1], label='$y$')
@@ -204,13 +210,17 @@ def plot_all(theta, t_eks, x_eks, y_eks, vx_eks, vy_eks, initial_eks, C, C_L, C_
     ax1.plot(t_eks, N_sistem[:, 3], label='$v_y$')
     ax1.grid(linestyle='--')
     ax1.legend(fancybox=False, prop={'size':9})
-    ax1.set_title('Simulacija')
+    ax1.set_title('Simulation', fontsize=17)
+    ax1.set_xlabel('t [s]', fontsize=13)
+    ax1.set_ylabel('[m, m/s]', fontsize=13)
     fig.tight_layout()
+    # fig.savefig(path_predstavitev + '/strmo_clanek_vse.pdf')
 
 def minimizacija(theta, t_eks, x_eks, y_eks, initial_eks):
     mthd='TNC'
     weighted=True
-    bnds = ((0.16, 0.55), (0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+    #bnds = ((0.16, 0.55), (0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+    bnds = ((0.16, 0.55), (0.12, 0.20), (2.0, 2.6), (0.18, 0.26), (0.8, 1.4))
     C = minimize(funkcional, (theta, 0.188, 2.37, 0.15, 1.24), \
         args=(t_eks, x_eks, y_eks, K, g, initial_eks, C_90, stall_angle, weighted), \
         method=mthd, bounds=bnds, tol=1e-3)
@@ -219,98 +229,219 @@ def minimizacija(theta, t_eks, x_eks, y_eks, initial_eks):
     theta_ef = C.x[0]
     return theta_ef, C, C_L, C_D
 
-# video_3
-theta_ef_3, C_3, C_L_3, C_D_3 = minimizacija(theta_3, t_eks_3, x_eks_3, y_eks_3, initial_eks_3)
-print(theta_ef_3)
-plot_all(theta_ef_3, t_eks_3, x_eks_3, y_eks_3, vx_eks_3, vy_eks_3, initial_eks_3, C_3, C_L_3, C_D_3)
+path_predstavitev = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'predstavitev'))
 
-# video_1
+C_L_strmo = C_L_cutoff(0.188, 2.37, stall_angle)
+C_D_strmo= C_D_cutoff(0.15, 1.24, C_90)
+# plot_all(theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, vx_eks_strmo, vy_eks_strmo, initial_eks_strmo, [None, 0.188, 2.37, 0.15, 1.24], C_L_strmo, C_D_strmo)
+
+# omejeno na skupni fit
 theta_ef_1, C_1, C_L_1, C_D_1 = minimizacija(theta_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1)
-print(theta_ef_1)
-plot_all(theta_ef_1, t_eks_1, x_eks_1, y_eks_1, vx_eks_1, vy_eks_1, initial_eks_1, C_1, C_L_1, C_D_1)
+print(theta_ef_1 - theta_1)
 
-###### ali theta_ef za vsakega posebi, ali za vse skupaj c in nato theta_ef?
+theta_ef_strmo, C_strmo, C_L_strmo, C_D_strmo = minimizacija(theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo)
+print(theta_ef_strmo - theta_strmo)
 
-# fig, ((ax3, ax4), (ax5, ax6), (ax7, ax8)) = plt.subplots(nrows=3, ncols=2, figsize = (8, 6))
-# # fig1, (axC1, axC2) = plt.subplots(nrows=2, ncols=1, figsize = (5, 5))
-# # plot_C_koef(axC1, 0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
-# # axC1.set_title('Article [1]')
-# # mthd='Nelder-Mead'
-# mthd='TNC'
-# # mthd='L-BFGS-B'
-# # mthd='SLSQP'
-# bnds = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
-# # bnds = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
-# # bnds = None
-# weighted = True
-# C_fit = minimize(funkcional_skupaj, (0.188, 2.37, 0.15, 1.24), \
-#     args=([ (theta_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1),\
-#          (theta_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo),\
-#          (theta_2, t_eks_2, x_eks_2, y_eks_2, initial_eks_2), \
-#          (theta_pocasi, t_eks_pocasi, x_eks_pocasi, y_eks_pocasi, initial_eks_pocasi), \
-#          (theta_zelodesno, t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, initial_eks_zelodesno)], \
-#          K, g, C_90, stall_angle, weighted), \
-#         method=mthd, bounds = bnds, tol=1e-3)
-# C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)
-# C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
-# # plot_C_koef(axC2, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
-# # axC2.set_title('Minimization')
-# # fig1.suptitle('Lift and drag coefficient', fontsize=16)
+theta_ef_2, C_2, C_L_2, C_D_2 = minimizacija(theta_2, t_eks_2, x_eks_2, y_eks_2, initial_eks_2)
+print(theta_ef_2 - theta_2)
 
-# # C_L = C_L_cutoff(0.188, 2.37, stall_angle)
-# # C_D = C_D_cutoff(0.15, 1.24, C_90)
-# N_sistem_1 = solution(t_eks_1, K, g, theta_1, C_L, C_D, stall_angle, initial_eks_1)[0]
-# N_sistem_strmo = solution(t_eks_strmo, K, g, theta_strmo, C_L, C_D, stall_angle, initial_eks_strmo)[0]
-# N_sistem_2 = solution(t_eks_2, K, g, theta_2, C_L, C_D, stall_angle, initial_eks_2)[0]
-# N_sistem_pocasi = solution(t_eks_pocasi, K, g, theta_pocasi, C_L, C_D, stall_angle, initial_eks_pocasi)[0]
-# N_sistem_zelodesno = solution(t_eks_zelodesno, K, g, theta_zelodesno, C_L, C_D, stall_angle, initial_eks_zelodesno)[0]
+theta_ef_pocasi, C_pocasi, C_L_pocasi, C_D_pocasi = minimizacija(theta_pocasi, t_eks_pocasi, x_eks_pocasi, y_eks_pocasi, initial_eks_pocasi)
+print(theta_ef_pocasi - theta_pocasi)
 
-# ax3.plot(N_sistem_1[:, 0], N_sistem_1[:, 1], '.', label='sim')
-# ax3.plot(x_eks_1, y_eks_1, '.', label='exp')
-# ax3.grid(linestyle='--')
-# ax3.legend(fancybox=False, prop={'size':8})
-# ax3.set_xlabel('x [m]')
-# ax3.set_ylabel('y [m]')
-# # ax3.axis('equal')
-# ax3.set_title(r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_1 * 180 / np.pi, initial_eks_1[2], initial_eks_1[3]))
-# ax4.plot(N_sistem_strmo[:, 0], N_sistem_strmo[:, 1], '.', label='sim')
-# ax4.plot(x_eks_strmo, y_eks_strmo, '.', label='exp')
-# ax4.grid(linestyle='--')
-# ax4.legend(fancybox=False, prop={'size':8})
-# ax4.set_xlabel('x [m]')
-# ax4.set_ylabel('y [m]')
-# # ax4.axis('equal')
-# ax4.set_title(r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_strmo * 180 / np.pi, initial_eks_strmo[2], initial_eks_strmo[3]))
-# ax5.plot(N_sistem_2[:, 0], N_sistem_2[:, 1], '.', label='sim')
-# ax5.plot(x_eks_2, y_eks_2, '.', label='exp')
-# ax5.grid(linestyle='--')
-# ax5.legend(fancybox=False, prop={'size':8})
-# ax5.set_xlabel('x [m]')
-# ax5.set_ylabel('y [m]')
-# # ax5.axis('equal')
-# ax5.set_title(r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_2 * 180 / np.pi, initial_eks_2[2], initial_eks_2[3]))
-# ax6.plot(N_sistem_pocasi[:, 0], N_sistem_pocasi[:, 1], '.', label='sim')
-# ax6.plot(x_eks_pocasi, y_eks_pocasi, '.', label='exp')
-# ax6.grid(linestyle='--')
-# ax6.legend(fancybox=False, prop={'size':8})
-# ax6.set_xlabel('x [m]')
-# ax6.set_ylabel('y [m]')
-# # ax6.axis('equal')
-# ax6.set_title(r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_pocasi * 180 / np.pi, initial_eks_pocasi[2], initial_eks_pocasi[3]))
-# ax7.plot(N_sistem_zelodesno[:, 0], N_sistem_zelodesno[:, 1], '.', label='sim')
-# ax7.plot(x_eks_zelodesno, y_eks_zelodesno, '.', label='exp')
-# ax7.grid(linestyle='--')
-# ax7.legend(fancybox=False, prop={'size':8})
-# ax7.set_xlabel('x [m]')
-# ax7.set_ylabel('y [m]')
-# # ax7.axis('equal')
-# ax7.set_title(r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_zelodesno * 180 / np.pi, initial_eks_zelodesno[2], initial_eks_zelodesno[3]))
-# fig.suptitle('Trajectories: minimization', fontsize=16)
-# fig.delaxes(ax8)
+theta_ef_zelodesno, C_zelodesno, C_L_zelodesno, C_D_zelodesno = minimizacija(theta_zelodesno, t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, initial_eks_zelodesno)
+print(theta_ef_zelodesno - theta_zelodesno)
 
-# # fig1.tight_layout()
-# fig.tight_layout()
-# # fig.savefig('C:/Users/rokgr/Dokumenti/Faks/02-airbounce/predstavitev/trajectories_mini.png')
-# # fig1.savefig('C:/Users/rokgr/Dokumenti/Faks/02-airbounce/predstavitev/mini_clanek_cji.png')
+theta_ef_3, C_3, C_L_3, C_D_3 = minimizacija(theta_3, t_eks_3, x_eks_3, y_eks_3, initial_eks_3)
+print(theta_ef_3 - theta_3)
+
+fig, ((ax3, ax4), (ax5, ax6), (ax7, ax8)) = plt.subplots(nrows=3, ncols=2, figsize = (8, 6))
+fig1, (axC1, axC2) = plt.subplots(nrows=2, ncols=1, figsize = (5, 5))
+plot_C_koef(axC1, 0.188, 2.37, stall_angle, 0.15, 1.24, C_90)
+axC1.set_title('article [1]')
+# mthd='Nelder-Mead'
+mthd='TNC'
+# mthd='L-BFGS-B'
+# mthd='SLSQP'
+bnds = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# bnds = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# bnds = None
+weighted = True
+C_fit = minimize(funkcional_skupaj, (0.188, 2.37, 0.15, 1.24), \
+    args=([ (theta_ef_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1),\
+         (theta_ef_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo),\
+         (theta_ef_2, t_eks_2, x_eks_2, y_eks_2, initial_eks_2), \
+         (theta_ef_pocasi, t_eks_pocasi, x_eks_pocasi, y_eks_pocasi, initial_eks_pocasi), \
+         (theta_ef_zelodesno, t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, initial_eks_zelodesno)], \
+         K, g, C_90, stall_angle, weighted), \
+        method=mthd, bounds = bnds, tol=1e-3)
+C_L = C_L_cutoff(C_fit.x[0], C_fit.x[1], stall_angle)
+C_D = C_D_cutoff(C_fit.x[2], C_fit.x[3], C_90)
+plot_C_koef(axC2, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
+axC2.set_title('weighted minimization')
+fig1.suptitle('Lift and Drag Coefficients', fontsize=16)
+print('cji:', C_fit.x[0], C_fit.x[1], C_fit.x[2], C_fit.x[3])
+
+# C_L = C_L_cutoff(0.188, 2.37, stall_angle)
+# C_D = C_D_cutoff(0.15, 1.24, C_90)
+N_sistem_1 = solution(t_eks_1, K, g, theta_ef_1, C_L, C_D, stall_angle, initial_eks_1)[0]
+N_sistem_strmo = solution(t_eks_strmo, K, g, theta_ef_strmo, C_L, C_D, stall_angle, initial_eks_strmo)[0]
+N_sistem_2 = solution(t_eks_2, K, g, theta_ef_2, C_L, C_D, stall_angle, initial_eks_2)[0]
+N_sistem_pocasi = solution(t_eks_pocasi, K, g, theta_ef_pocasi, C_L, C_D, stall_angle, initial_eks_pocasi)[0]
+N_sistem_zelodesno = solution(t_eks_zelodesno, K, g, theta_ef_zelodesno, C_L, C_D, stall_angle, initial_eks_zelodesno)[0]
+
+ax3.plot(N_sistem_1[:, 0], N_sistem_1[:, 1], '.', label='sim')
+ax3.plot(x_eks_1, y_eks_1, '.', label='exp')
+ax3.grid(linestyle='--')
+ax3.legend(fancybox=False, prop={'size':8})
+ax3.set_xlabel('x [m]')
+ax3.set_ylabel('y [m]')
+# ax3.axis('equal')
+ax3.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_1 * 180 / np.pi, initial_eks_1[2], initial_eks_1[3]))
+ax7.plot(N_sistem_strmo[:, 0], N_sistem_strmo[:, 1], '.', label='sim')
+ax7.plot(x_eks_strmo, y_eks_strmo, '.', label='exp')
+ax7.grid(linestyle='--')
+ax7.legend(fancybox=False, prop={'size':8})
+ax7.set_xlabel('x [m]')
+ax7.set_ylabel('y [m]')
+# ax7.axis('equal')
+ax7.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_strmo * 180 / np.pi, initial_eks_strmo[2], initial_eks_strmo[3]))
+ax5.plot(N_sistem_2[:, 0], N_sistem_2[:, 1], '.', label='sim')
+ax5.plot(x_eks_2, y_eks_2, '.', label='exp')
+ax5.grid(linestyle='--')
+ax5.legend(fancybox=False, prop={'size':8})
+ax5.set_xlabel('x [m]')
+ax5.set_ylabel('y [m]')
+# ax5.axis('equal')
+ax5.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_2 * 180 / np.pi, initial_eks_2[2], initial_eks_2[3]))
+ax6.plot(N_sistem_pocasi[:, 0], N_sistem_pocasi[:, 1], '.', label='sim')
+ax6.plot(x_eks_pocasi, y_eks_pocasi, '.', label='exp')
+ax6.grid(linestyle='--')
+ax6.legend(fancybox=False, prop={'size':8})
+ax6.set_xlabel('x [m]')
+ax6.set_ylabel('y [m]')
+# ax6.axis('equal')
+ax6.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_pocasi * 180 / np.pi, initial_eks_pocasi[2], initial_eks_pocasi[3]))
+ax4.plot(N_sistem_zelodesno[:, 0], N_sistem_zelodesno[:, 1], '.', label='sim')
+ax4.plot(x_eks_zelodesno, y_eks_zelodesno, '.', label='exp')
+ax4.grid(linestyle='--')
+ax4.legend(fancybox=False, prop={'size':8})
+ax4.set_xlabel('x [m]')
+ax4.set_ylabel('y [m]')
+# ax4.axis('equal')
+ax4.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_zelodesno * 180 / np.pi, initial_eks_zelodesno[2], initial_eks_zelodesno[3]))
+
+N_sistem_3 = solution(t_eks_3, K, g, theta_3, C_L, C_D, stall_angle, initial_eks_3)[0]
+ax8.plot(N_sistem_3[:, 0], N_sistem_3[:, 1], '.', label='sim')
+ax8.plot(x_eks_3, y_eks_3, '.', label='exp')
+ax8.grid(linestyle='--')
+ax8.legend(fancybox=False, prop={'size':8})
+ax8.set_xlabel('x [m]')
+ax8.set_ylabel('y [m]')
+# ax8.axis('equal')
+ax8.set_title('TEST, EXCLUDED FROM FIT \n' + r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_3 * 180 / np.pi, initial_eks_zelodesno[2], initial_eks_zelodesno[3]))
+#fig.delaxes(ax8)
+
+fig.suptitle('Trajectories: Weighted Minimization and Experiment', fontsize=16)
+fig1.tight_layout()
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+fig1.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+# fig.savefig(path_predstavitev + '/traj_weighted_mini.pdf')
+# fig1.savefig(path_predstavitev + '/cji_clanek_weighted.pdf')
+
+
+fig_un, ((ax3, ax4), (ax5, ax6), (ax7, ax8)) = plt.subplots(nrows=3, ncols=2, figsize = (8, 6))
+fig1_un, (axC1, axC2) = plt.subplots(nrows=2, ncols=1, figsize = (5, 5))
+plot_C_koef(axC1, C_fit.x[0], C_fit.x[1], stall_angle, C_fit.x[2], C_fit.x[3], C_90)
+axC1.set_title('weighted minimization')
+# mthd='Nelder-Mead'
+mthd='TNC'
+# mthd='L-BFGS-B'
+# mthd='SLSQP'
+bnds = ((0.01, 0.3), (0.01, 3.), (0.01, 0.3), (0.01, 2.))
+# bnds = ((0.01, None), (0.01, None), (0.01, None), (0.01, None))
+# bnds = None
+weighted = False
+C_fit_un = minimize(funkcional_skupaj, (0.188, 2.37, 0.15, 1.24), \
+    args=([ (theta_ef_1, t_eks_1, x_eks_1, y_eks_1, initial_eks_1),\
+         #(theta_ef_strmo, t_eks_strmo, x_eks_strmo, y_eks_strmo, initial_eks_strmo),\
+         (theta_ef_2, t_eks_2, x_eks_2, y_eks_2, initial_eks_2), \
+         (theta_ef_pocasi, t_eks_pocasi, x_eks_pocasi, y_eks_pocasi, initial_eks_pocasi), \
+         (theta_ef_zelodesno, t_eks_zelodesno, x_eks_zelodesno, y_eks_zelodesno, initial_eks_zelodesno)], \
+         K, g, C_90, stall_angle, weighted), \
+        method=mthd, bounds = bnds, tol=1e-3)
+C_L = C_L_cutoff(C_fit_un.x[0], C_fit_un.x[1], stall_angle)
+C_D = C_D_cutoff(C_fit_un.x[2], C_fit_un.x[3], C_90)
+plot_C_koef(axC2, C_fit_un.x[0], C_fit_un.x[1], stall_angle, C_fit_un.x[2], C_fit_un.x[3], C_90)
+axC2.set_title('unweighted minimization')
+fig1_un.suptitle('Lift and Drag Coefficients', fontsize=16)
+print('cji:', C_fit_un.x[0], C_fit_un.x[1], C_fit_un.x[2], C_fit_un.x[3])
+
+# C_L = C_L_cutoff(0.188, 2.37, stall_angle)
+# C_D = C_D_cutoff(0.15, 1.24, C_90)
+N_sistem_1_un = solution(t_eks_1, K, g, theta_ef_1, C_L, C_D, stall_angle, initial_eks_1)[0]
+N_sistem_strmo_un = solution(t_eks_strmo, K, g, theta_ef_strmo, C_L, C_D, stall_angle, initial_eks_strmo)[0]
+N_sistem_2_un = solution(t_eks_2, K, g, theta_ef_2, C_L, C_D, stall_angle, initial_eks_2)[0]
+N_sistem_pocasi_un = solution(t_eks_pocasi, K, g, theta_ef_pocasi, C_L, C_D, stall_angle, initial_eks_pocasi)[0]
+N_sistem_zelodesno_un = solution(t_eks_zelodesno, K, g, theta_ef_zelodesno, C_L, C_D, stall_angle, initial_eks_zelodesno)[0]
+
+ax3.plot(N_sistem_1_un[:, 0], N_sistem_1_un[:, 1], '.', label='unw')
+ax3.plot(N_sistem_1[:, 0], N_sistem_1[:, 1], '.', label='w')
+ax3.grid(linestyle='--')
+ax3.legend(fancybox=False, prop={'size':8})
+ax3.set_xlabel('x [m]')
+ax3.set_ylabel('y [m]')
+# ax3.axis('equal')
+ax3.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_1 * 180 / np.pi, initial_eks_1[2], initial_eks_1[3]))
+ax7.plot(N_sistem_strmo_un[:, 0], N_sistem_strmo_un[:, 1], '.', label='unw')
+ax7.plot(N_sistem_strmo[:, 0], N_sistem_strmo[:, 1], '.', label='w')
+ax7.grid(linestyle='--')
+ax7.legend(fancybox=False, prop={'size':8})
+ax7.set_xlabel('x [m]')
+ax7.set_ylabel('y [m]')
+# ax7.axis('equal')
+ax7.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_strmo * 180 / np.pi, initial_eks_strmo[2], initial_eks_strmo[3]))
+ax5.plot(N_sistem_2_un[:, 0], N_sistem_2_un[:, 1], '.', label='unw')
+ax5.plot(N_sistem_2[:, 0], N_sistem_2[:, 1], '.', label='w')
+ax5.grid(linestyle='--')
+ax5.legend(fancybox=False, prop={'size':8})
+ax5.set_xlabel('x [m]')
+ax5.set_ylabel('y [m]')
+# ax5.axis('equal')
+ax5.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_2 * 180 / np.pi, initial_eks_2[2], initial_eks_2[3]))
+ax6.plot(N_sistem_pocasi_un[:, 0], N_sistem_pocasi_un[:, 1], '.', label='unw')
+ax6.plot(N_sistem_pocasi[:, 0], N_sistem_pocasi[:, 1], '.', label='w')
+ax6.grid(linestyle='--')
+ax6.legend(fancybox=False, prop={'size':8})
+ax6.set_xlabel('x [m]')
+ax6.set_ylabel('y [m]')
+# ax6.axis('equal')
+ax6.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_pocasi * 180 / np.pi, initial_eks_pocasi[2], initial_eks_pocasi[3]))
+ax4.plot(N_sistem_zelodesno_un[:, 0], N_sistem_zelodesno_un[:, 1], '.', label='unw')
+ax4.plot(N_sistem_zelodesno[:, 0], N_sistem_zelodesno[:, 1], '.', label='w')
+ax4.grid(linestyle='--')
+ax4.legend(fancybox=False, prop={'size':8})
+ax4.set_xlabel('x [m]')
+ax4.set_ylabel('y [m]')
+# ax4.axis('equal')
+ax4.set_title(r'$\theta_{{ef}} = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_ef_zelodesno * 180 / np.pi, initial_eks_zelodesno[2], initial_eks_zelodesno[3]))
+
+N_sistem_3_un = solution(t_eks_3, K, g, theta_3, C_L, C_D, stall_angle, initial_eks_3)[0]
+ax8.plot(N_sistem_3_un[:, 0], N_sistem_3_un[:, 1], '.', label='unw')
+ax8.plot(N_sistem_3[:, 0], N_sistem_3[:, 1], '.', label='w')
+ax8.grid(linestyle='--')
+ax8.legend(fancybox=False, prop={'size':8})
+ax8.set_xlabel('x [m]')
+ax8.set_ylabel('y [m]')
+# ax8.axis('equal')
+ax8.set_title('TEST, EXCLUDED FROM FIT \n' + r'$\theta = {:.0f}^{{\circ}}$, $v_x = {:.2f}$ m/s, $v_y = {:.2f}$ m/s'.format(theta_3 * 180 / np.pi, initial_eks_zelodesno[2], initial_eks_zelodesno[3]))
+#fig_un.delaxes(ax8)
+
+fig_un.suptitle('Minimization: Weighted vs Unweighted', fontsize=16)
+fig1_un.tight_layout()
+fig_un.tight_layout(rect=[0, 0.03, 1, 0.95])
+fig1_un.tight_layout(rect=[0, 0.03, 1, 0.95])
+# fig_un.savefig(path_predstavitev + '/traj_unweighted_weighted.pdf')
+# fig1_un.savefig(path_predstavitev + '/cji_weighted_unweighted.pdf')
 
 plt.show()
