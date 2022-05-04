@@ -7,6 +7,7 @@ Naredi:
     skala videoanalasyiy pixel v metre
     konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
     brezdimenzijska
+    pri faznem shrani prej za vsak primer
 
 david:
     indukcija
