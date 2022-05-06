@@ -106,7 +106,7 @@ for v in v_list:
         if i != None:
             minimum_alpha.append(alpha * 180 / np.pi)
             minimum_v.append(v)
-            minimum_curv.append(curvature(sol[i-2:i+3, 0], sol[i-2:i+3, 1])[3])
+            minimum_curv.append(curvature(sol[i-2:i+3, 0], sol[i-2:i+3, 1])[2])
             ax1.plot(sol[:, 0], sol[:, 1], label='{}'.format(label))
             label += 1
 
