@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
-from scipy.optimize import curve_fit, minimize
+from scipy.optimize import minimize
 
 def C_L_cutoff(C_L0, C_Lalpha, stall_angle):
     '''Lift cutoff pri stall angle: rad'''
@@ -10,7 +10,7 @@ def C_L_cutoff(C_L0, C_Lalpha, stall_angle):
 
     def C_L(alpha):
         if alpha >= stall_angle:
-            return a * (alpha - np.pi / 2)**2 / 1 ###### 1
+            return a * (alpha - np.pi / 2)**2
         else:
             return C_L0 + C_Lalpha * alpha
     return C_L
@@ -25,19 +25,6 @@ def C_D_cutoff(C_D0, C_Dalpha, C_90):
         else:
             return C_D0 + C_Dalpha * alpha**2            
     return C_D
-
-def frisbee_D(y, t, C_L, C_D, K, theta, g, stall_angle):
-    d1, d2, v1, v2 = y
-    v = (v1**2 + v2**2)**0.5
-    alpha = np.arctan(-v2 / v1)
-    L1 = K * C_L(alpha) * (-v2) * v
-    L2 = K * C_L(alpha) * v1 * v
-    D1 = K * C_D(alpha) * (-v1) * v
-    D2 = K * C_D(alpha) * (-v2) * v
-    a1 = L1 + D1 - g * np.sin(theta)
-    a2 = L2 + D2 - g * np.cos(theta)
-    dydt = [v1, v2, a1, a2]
-    return dydt
 
 def frisbee_D_dim(y, t, C_L, C_D, theta):
     d1, d2, v1, v2 = y
@@ -58,20 +45,6 @@ def frisbee_D_to_N(sol, R0_0R):
 def initial_N_to_D(d1, d2, v1, v2, R0_0R):
     return np.matmul(R0_0R.T, np.array([d1, d2, v1, v2])).T
 
-def solution(t, K, g, theta, C_L, C_D, stall_angle, inital, inital_in_N=True):
-    R = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
-    R0_0R = np.block([[R, np.zeros((2,2))], [np.zeros((2,2)), R]])   # diagonalna blocna
-
-    x, y, vx, vy = inital
-    if inital_in_N:
-        y0 = initial_N_to_D(x, y, vx, vy, R0_0R)
-    else:
-        y0 = (x, y, vx, vy)
-
-    D_sistem = odeint(frisbee_D, y0, t, args=(C_L, C_D, K, theta, g, stall_angle))
-    N_sistem = frisbee_D_to_N(D_sistem, R0_0R)
-    return N_sistem, D_sistem
-
 def solution_dim(t, K, g, theta, C_L, C_D, stall_angle, inital, inital_in_N=True):
     R = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
     R0_0R = np.block([[R, np.zeros((2,2))], [np.zeros((2,2)), R]])   # diagonalna blocna
@@ -83,10 +56,20 @@ def solution_dim(t, K, g, theta, C_L, C_D, stall_angle, inital, inital_in_N=True
         y0 = (x, y, vx, vy)
 
     D_sistem = odeint(frisbee_D_dim, y0, t, args=(C_L, C_D, theta))
-    D_sistem[:, 0:2] = D_c * D_sistem[:, 0:2]
-    D_sistem[:, 2:4] = D_c * D_sistem[:, 2:4]
     N_sistem = frisbee_D_to_N(D_sistem, R0_0R)
     return N_sistem, D_sistem
+
+def minima(lst):
+    i = np.argmin(lst)
+    if i not in [0, 1, 2] and i != len(lst) - 1:
+        return i
+    return None
+
+def curvature(x, y):
+    '''1. odvod = 0 v min, zato samo 2. odvod'''
+    dy = np.gradient(y, x)
+    ddy = np.gradient(dy, x)
+    return ddy
 
 g = 9.8
 m = 0.175
@@ -98,31 +81,47 @@ C_90 = 1.1
 
 D_c = 1 / K
 T_c = (1 / (K * g))**0.5
-print(D_c, T_c)
 
-C_L = C_L_cutoff(0.188, 2.37, stall_angle)
-C_D= C_D_cutoff(0.15, 1.24, C_90)
+C_L = C_L_cutoff(0.138, 2.20, stall_angle)
+C_D = C_D_cutoff(0.171, 1.47, C_90)
 
-t = np.linspace(0, 2, 100)
-vx0 = 15
-vy0 = -5
-theta = np.pi / 180 * 15
+theta = np.pi / 180 * 10
+t = np.linspace(0, 1, 100)
+v_list = np.linspace(0.1, 4, 3)
+alpha_list = np.linspace(1, 20, 3) * np.pi / 180
 
-t_dim = np.linspace(0, 2, 100) / T_c
-vx0_dim = 15 * T_c / D_c
-vy0_dim = -5 * T_c / D_c
+fig, (ax1, ax2) = plt.subplots(2, 1)
 
-sol = solution(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, vx0, vy0))[0]
-sol_dim = solution_dim(t_dim, K, g, theta, C_L, C_D, stall_angle, (0, 0, vx0_dim, vy0_dim))[0]
+minimum_alpha = []
+minimum_v = []
+minimum_curv = []
 
-fig, ax = plt.subplots()
-ax.plot(sol[:, 0], sol[:, 1], '+', label='obi')
-ax.plot(sol_dim[:, 0], sol_dim[:, 1], 'x', label='dim')
-ax.grid(linestyle='--')
-ax.legend(fancybox=False, prop={'size':9})
-ax.set_xlabel('x [m]')
-ax.set_ylabel('y [m]')
-#ax.axis('equal')
-ax.set_title('Trajectory')
+label = 0
+for v in v_list:
+    for alpha in alpha_list:
+        vx0 = np.cos(alpha) * v
+        vy0 = -np.sin(alpha) * v
+        sol = solution_dim(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, vx0, vy0))[0]
+        i = minima(sol[:,1])
+        if i != None:
+            minimum_alpha.append(alpha * 180 / np.pi)
+            minimum_v.append(v)
+            minimum_curv.append(curvature(sol[i-2:i+3, 0], sol[i-2:i+3, 1])[3])
+            ax1.plot(sol[:, 0], sol[:, 1], label='{}'.format(label))
+            label += 1
 
+print(minimum_curv)
+ax2.scatter(minimum_alpha, minimum_v)
+ax2.set_xlim(left=0)
+ax2.set_ylim(bottom=0)
+ax2.set_xlabel(r'$\alpha [^{\circ}]$')
+ax2.set_ylabel(r'$\nu$')
+
+ax1.set_xlabel(r'$\sigma_x$')
+ax1.set_ylabel(r'$\sigma_y$')
+ax1.legend()
+# ax1.axis('equal')
+ax1.set_title('Trajectory')
+
+fig.tight_layout()
 plt.show()
