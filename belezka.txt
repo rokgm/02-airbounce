@@ -1,12 +1,6 @@
-Preveri čas iznihanja frisbeeja, če se ga upogne?
-Vrtinci
-
 Naredi:
     error bar
 	fazni diagram, magnituda-urkivljenost, razdalje kje je bounce
-    skala videoanalasyiy pixel v metre
-    konstanten faktor razdalje x in y za fit (reskalira cas), ce 1 je vredu
-    brezdimenzijska
     pri faznem shrani prej za vsak primer
     globina in čas bounca
 
