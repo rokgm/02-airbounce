@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
-from scipy.optimize import curve_fit, minimize
+from scipy.optimize import minimize
 
 # D je koordinatni sistem diska ob t=0, N je koordinatni sistem x, y
 
