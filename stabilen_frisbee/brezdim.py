@@ -85,43 +85,47 @@ T_c = (1 / (K * g))**0.5
 C_L = C_L_cutoff(0.138, 2.20, stall_angle)
 C_D = C_D_cutoff(0.171, 1.47, C_90)
 
-theta = np.pi / 180 * 10
-t = np.linspace(0, 1, 100)
-v_list = np.linspace(0.1, 4, 3)
-alpha_list = np.linspace(1, 20, 3) * np.pi / 180
+theta = np.pi / 180 * 15
+t = np.linspace(0, 2, 1000)
+v_list = np.linspace(0.1, 10., 20)
+alpha_list = np.linspace(0., 89., 20) * np.pi / 180
 
 fig, (ax1, ax2) = plt.subplots(2, 1)
 
 minimum_alpha = []
 minimum_v = []
 minimum_curv = []
+matrix_curvature = np.zeros((len(v_list), len(alpha_list)))
 
 label = 0
-for v in v_list:
-    for alpha in alpha_list:
+for i in range(len(v_list)):
+    v = v_list[i]
+    for j in range(len(alpha_list)):
+        alpha = alpha_list[j]
         vx0 = np.cos(alpha) * v
         vy0 = -np.sin(alpha) * v
         sol = solution_dim(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, vx0, vy0))[0]
-        i = minima(sol[:,1])
-        if i != None:
+        minimum = minima(sol[:,1])
+        if minimum != None:
             minimum_alpha.append(alpha * 180 / np.pi)
             minimum_v.append(v)
-            minimum_curv.append(curvature(sol[i-2:i+3, 0], sol[i-2:i+3, 1])[2])
-            ax1.plot(sol[:, 0], sol[:, 1], label='{}'.format(label))
-            label += 1
+            curviness = curvature(sol[minimum-2:minimum+3, 0], sol[minimum-2:minimum+3, 1])[2]
+            minimum_curv.append(curviness)
+            matrix_curvature[len(v_list) - 1 - i, j] = curviness
+            # ax1.plot(sol[:, 0], sol[:, 1])
 
-print(minimum_curv)
+ax1.matshow(matrix_curvature)
 ax2.scatter(minimum_alpha, minimum_v)
 ax2.set_xlim(left=0)
 ax2.set_ylim(bottom=0)
 ax2.set_xlabel(r'$\alpha [^{\circ}]$')
 ax2.set_ylabel(r'$\nu$')
 
-ax1.set_xlabel(r'$\sigma_x$')
-ax1.set_ylabel(r'$\sigma_y$')
-ax1.legend()
-# ax1.axis('equal')
-ax1.set_title('Trajectory')
+# ax1.set_xlabel(r'$\sigma_x$')
+# ax1.set_ylabel(r'$\sigma_y$')
+# ax1.legend()
+# # ax1.axis('equal')
+# ax1.set_title('Trajectory')
 
 fig.tight_layout()
 plt.show()

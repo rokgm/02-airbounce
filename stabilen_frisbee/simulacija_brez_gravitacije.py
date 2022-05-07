@@ -44,40 +44,53 @@ def solution_ndim(t, K, C_L, C_D, stall_angle, inital, inital_in_N=True):
     D_sistem = odeint(frisbee_D_ndim, y0, t, args=(C_L, C_D))
     return D_sistem
 
+def minima(lst):
+    i = np.argmin(lst)
+    if i not in [0, 1, 2] and i != len(lst) - 1:
+        return i
+    return None
+
 m = 0.175
 A = 0.0616
 ro = 1.23
 K = A * ro / (2 * m)
 stall_angle = np.pi / 180 * 25
 C_90 = 1.1
+
 C_L = C_L_cutoff(0.138, 2.20, stall_angle)
 C_D = C_D_cutoff(0.171, 1.47, C_90)
 
-D_c = 1 / K
-T_c = 1
+t_ndim = np.linspace(0, 10, 5000)
+v_ndim = 2
+alpha_list = np.pi / 180 * np.linspace(0.01, 60., 500)
+x_coor_min_list = []
+y_coor_min_list = []
+alpha_coor_min_list = []
 
-t = np.linspace(0, 10, 100)
-t_ndim = t / T_c
-v_ndim_list = [4]
-alpha_list = np.pi / 180 * np.linspace(-3.5, 50, 10)
-
-kot_nevt = np.pi /180 * 3.5
-R = np.array([[np.cos(kot_nevt), -np.sin(kot_nevt)], [np.sin(kot_nevt), np.cos(kot_nevt)]])
-
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(1, 1, figsize=(4, 2))
 for alpha in alpha_list:
-    for v_ndim in v_ndim_list:
-        vx0_ndim = v_ndim * np.cos(alpha)
-        vy0_ndim = -v_ndim * np.sin(alpha)
-        sol_ndim = solution_ndim(t_ndim, K, C_L, C_D, stall_angle, (0, 0, vx0_ndim, vy0_ndim))
-        sol_ndim = np.matmul(R.T, np.array([sol_ndim[:, 0], sol_ndim[:, 1]])).T
-        ax.plot(sol_ndim[:, 0] * D_c, sol_ndim[:, 1] * D_c, '.')
+    vx0_ndim = v_ndim * np.cos(alpha)
+    vy0_ndim = -v_ndim * np.sin(alpha)
+    sol_ndim = solution_ndim(t_ndim, K, C_L, C_D, stall_angle, (0, 0, vx0_ndim, vy0_ndim))
+    # ax.plot(sol_ndim[:, 0] , sol_ndim[:, 1], '.-')
+    minimum = minima(sol_ndim[:,1])
+    if minimum != None:
+        # ax.plot(sol_ndim[minimum,0], sol_ndim[minimum,1], 'x')
+        x_coor_min_list.append(sol_ndim[minimum,0])
+        y_coor_min_list.append(-sol_ndim[minimum,1])
+        alpha_coor_min_list.append(alpha)
 
+ax.plot(np.array(alpha_coor_min_list) * 180 / np.pi, x_coor_min_list, label=r'$\sigma_1$')
+ax.plot(np.array(alpha_coor_min_list) * 180 / np.pi, y_coor_min_list, label=r'$-\sigma_2$')
 ax.grid(linestyle='--')
-ax.set_xlabel(r'$\sigma_1$')
-ax.set_ylabel(r'$\sigma_2$')
+ax.set_xlabel(r'$\alpha [^{\circ}]$')
+# ax.set_ylabel(r'$\sigma_1$')
+ax.set_xlim(left=0)
+ax.set_ylim(bottom=0)
+ax.legend()
 # ax.axis('equal')
-ax.set_title('Trajectory')
+# ax.set_title(r'Distance to the Bounce Minimum with angle of attack')
 fig.tight_layout()
 
+fig.savefig('predstavitev/distance_to_bounce.pdf')
 plt.show()
