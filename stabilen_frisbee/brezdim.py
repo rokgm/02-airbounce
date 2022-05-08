@@ -85,41 +85,68 @@ T_c = (1 / (K * g))**0.5
 C_L = C_L_cutoff(0.138, 2.20, stall_angle)
 C_D = C_D_cutoff(0.171, 1.47, C_90)
 
-theta = np.pi / 180 * 15
+theta_list = np.pi / 180 * np.array([10, 15, 20, 25])
 t = np.linspace(0, 2, 1000)
-v_list = np.linspace(0.1, 10., 20)
-alpha_list = np.linspace(0., 89., 20) * np.pi / 180
+v_list = np.linspace(0.1, 5., 100)
+alpha_list = np.linspace(1., 60., 100) * np.pi / 180
 
-fig, (ax1, ax2) = plt.subplots(2, 1)
+# minimum_alpha = []
+# minimum_v = []
+# minimum_curv = []
+matrix_curvature = np.zeros((len(theta_list), len(v_list), len(alpha_list)))
 
-minimum_alpha = []
-minimum_v = []
-minimum_curv = []
-matrix_curvature = np.zeros((len(v_list), len(alpha_list)))
+for th in range(len(theta_list)):
+    theta = theta_list[th]
+    for i in range(len(v_list)):
+        v = v_list[i]
+        for j in range(len(alpha_list)):
+            alpha = alpha_list[j]
+            vx0 = np.cos(alpha) * v
+            vy0 = -np.sin(alpha) * v
+            sol = solution_dim(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, vx0, vy0))[0]
+            minimum = minima(sol[:,1])
+            if minimum != None:
+                # minimum_alpha.append(alpha * 180 / np.pi)
+                # minimum_v.append(v)
+                curviness = curvature(sol[minimum-2:minimum+3, 0], sol[minimum-2:minimum+3, 1])[2]
+                # minimum_curv.append(curviness)
+                matrix_curvature[th, i, j] = curviness
+                # ax1.plot(sol[:, 0], sol[:, 1])
 
-label = 0
-for i in range(len(v_list)):
-    v = v_list[i]
-    for j in range(len(alpha_list)):
-        alpha = alpha_list[j]
-        vx0 = np.cos(alpha) * v
-        vy0 = -np.sin(alpha) * v
-        sol = solution_dim(t, K, g, theta, C_L, C_D, stall_angle, (0, 0, vx0, vy0))[0]
-        minimum = minima(sol[:,1])
-        if minimum != None:
-            minimum_alpha.append(alpha * 180 / np.pi)
-            minimum_v.append(v)
-            curviness = curvature(sol[minimum-2:minimum+3, 0], sol[minimum-2:minimum+3, 1])[2]
-            minimum_curv.append(curviness)
-            matrix_curvature[len(v_list) - 1 - i, j] = curviness
-            # ax1.plot(sol[:, 0], sol[:, 1])
+plt.subplot(2,2,1)
+cp = plt.contourf(alpha_list * 180 / np.pi, v_list, matrix_curvature[0,:,:])
+plt.title(r'$\theta = 10 ^{{\circ}}$', fontsize=14)
+plt.xlabel(r'$\alpha [^{\circ}]$ ', fontsize=12)
+plt.ylabel(r'$\nu$', fontsize=12)
+plt.colorbar(cp)
 
-ax1.matshow(matrix_curvature)
-ax2.scatter(minimum_alpha, minimum_v)
-ax2.set_xlim(left=0)
-ax2.set_ylim(bottom=0)
-ax2.set_xlabel(r'$\alpha [^{\circ}]$')
-ax2.set_ylabel(r'$\nu$')
+plt.subplot(2,2,2)
+cp = plt.contourf(alpha_list * 180 / np.pi, v_list, matrix_curvature[1,:,:])
+plt.title(r'$\theta = 15 ^{{\circ}}$', fontsize=14)
+plt.xlabel(r'$\alpha [^{\circ}]$ ', fontsize=12)
+plt.ylabel(r'$\nu$', fontsize=12)
+plt.colorbar(cp)
+
+plt.subplot(2,2,3)
+cp = plt.contourf(alpha_list * 180 / np.pi, v_list, matrix_curvature[2,:,:])
+plt.title(r'$\theta = 20 ^{{\circ}}$', fontsize=14)
+plt.xlabel(r'$\alpha [^{\circ}]$ ', fontsize=12)
+plt.ylabel(r'$\nu$', fontsize=12)
+plt.colorbar(cp)
+
+plt.subplot(2,2,4)
+cp = plt.contourf(alpha_list * 180 / np.pi, v_list, matrix_curvature[3,:,:])
+plt.title(r'$\theta = 25 ^{{\circ}}$', fontsize=14)
+plt.xlabel(r'$\alpha [^{\circ}]$ ', fontsize=12)
+plt.ylabel(r'$\nu$', fontsize=12)
+plt.colorbar(cp)
+
+# ax1.matshow(matrix_curvature)
+# ax2.scatter(minimum_alpha, minimum_v)
+# ax2.set_xlim(left=0)
+# ax2.set_ylim(bottom=0)
+# ax2.set_xlabel(r'$\alpha [^{\circ}]$')
+# ax2.set_ylabel(r'$\nu$')
 
 # ax1.set_xlabel(r'$\sigma_x$')
 # ax1.set_ylabel(r'$\sigma_y$')
@@ -127,5 +154,6 @@ ax2.set_ylabel(r'$\nu$')
 # # ax1.axis('equal')
 # ax1.set_title('Trajectory')
 
-fig.tight_layout()
+plt.tight_layout()
+# plt.savefig('predstavitev/fazni_diagram_4x.pdf')
 plt.show()
