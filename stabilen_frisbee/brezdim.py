@@ -85,10 +85,10 @@ T_c = (1 / (K * g))**0.5
 C_L = C_L_cutoff(0.138, 2.20, stall_angle)
 C_D = C_D_cutoff(0.171, 1.47, C_90)
 
-theta_list = np.pi / 180 * np.array([10, 15, 20, 25])
+theta_list = np.pi / 180 * np.array([10, 20, 30, 40])
 t = np.linspace(0, 2, 1000)
-v_list = np.linspace(0.1, 5., 100)
-alpha_list = np.linspace(1., 60., 100) * np.pi / 180
+v_list = np.linspace(0.1, 5., 20)
+alpha_list = np.linspace(1., 60., 20) * np.pi / 180
 
 # minimum_alpha = []
 # minimum_v = []
